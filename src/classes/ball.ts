@@ -2,10 +2,17 @@ import {Vector2} from './vector2';
 
 
 export class Ball {
+
+    public disposed:boolean;
+
     constructor(public position: Vector2,public move: Vector2, public size:number, public color='#000') {
+        this.disposed = false;
     }
 
     draw(ctx:CanvasRenderingContext2D,duration:number) {
+
+        if(this.disposed)return;
+
         ctx.fillStyle = this.color;
         ctx.beginPath();
         ctx.arc(
@@ -25,6 +32,11 @@ export class Ball {
 
         this.position.x += this.move.x * ms / 1000;
         this.position.y += this.move.y * ms / 1000;
+    }
+
+
+    dispose(){
+        this.disposed = true;
     }
 
 }

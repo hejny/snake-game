@@ -59,6 +59,16 @@ function drawLoop(timestamp) {
     timestamp_last = timestamp;
 
     scene.update(ms);
+
+
+    for(let ball of balls){
+        if(Vector2.distance(snake.head,ball.position)<30){
+            ball.dispose();
+        }
+    }
+
+
+
     scene.draw(duration);
 
     window.requestAnimationFrame(drawLoop);
