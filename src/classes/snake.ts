@@ -27,12 +27,14 @@ export class Snake {
 
 
 
-        let lastSegment;
+        let lastSegment,i=0;
         for(let segment of this.segments){
+
+            i++;
 
             if(lastSegment){
                 ctx.fillStyle = this.color;
-                ctx.lineWidth = this.size;
+                ctx.lineWidth = Math.sqrt(this.segments.length-i);
                 ctx.lineCap="round";
                 ctx.beginPath();
                 ctx.moveTo(lastSegment.x,lastSegment.y);
@@ -75,7 +77,7 @@ export class Snake {
         newSegments.push(newHead);
 
 
-        let i=0,l=Math.min(this.segments.length,400);
+        let i=0,l=Math.min(this.segments.length,this.size);
         for(;i<l;i++){
             newSegments.push(this.segments[i]);
         }

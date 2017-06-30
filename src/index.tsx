@@ -17,7 +17,7 @@ const scene = new Scene(ctx);
 
 
 
-const snake = new Snake([new Vector2(100,100)],0, 40);
+const snake = new Snake([new Vector2(100,100)],0, 200);
 scene.addObject(snake);
 
 
@@ -64,6 +64,7 @@ function drawLoop(timestamp) {
     for(let ball of balls){
         if(Vector2.distance(snake.head,ball.position)<30){
             ball.dispose();
+            snake.size+=10;
         }
     }
 
