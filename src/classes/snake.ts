@@ -1,22 +1,50 @@
 import {Vector2} from './vector2';
 
 export class Snake {
-    constructor(public segments: Vector2[],public move: Vector2, public size:number, public color='#000') {
+
+    public speed:number;
+
+    constructor(public segments: Vector2[],public headRotation: number, public size:number, public color='#000') {
+        this.speed = 100;
     }
 
     get head(): Vector2{
         return this.segments[0];//this.segments[this.segments.length-1];
     }
 
-    draw(ctx) {
+    draw(ctx:CanvasRenderingContext2D,duration:number) {
+
         ctx.fillStyle = this.color;
+        ctx.lineWidth = this.size;
+        ctx.lineCap="round";
         ctx.beginPath();
 
-        this.segments.forEach((segment,index)=>{
+        /*this.segments.forEach((segment,index)=>{
             ctx[index===0?'moveTo':'lineTo'](segment.x,segment.y);
         });
 
-        ctx.stroke();
+        ctx.stroke();*/
+
+
+
+        let lastSegment;
+        for(let segment of this.segments){
+
+            if(lastSegment){
+                ctx.fillStyle = this.color;
+                ctx.lineWidth = this.size;
+                ctx.lineCap="round";
+                ctx.beginPath();
+                ctx.moveTo(lastSegment.x,lastSegment.y);
+                ctx.lineTo(segment.x,segment.y);
+                ctx.stroke();
+            }
+            lastSegment = segment;
+
+
+        }
+
+
 
 
         /*this.segments.forEach((segment,index)=>{
@@ -33,20 +61,21 @@ export class Snake {
 
     update(ms) {
 
-        this.move.y *= Math.pow(0.9, ms / 1000); //Friction
-        this.move.x *= Math.pow(0.9, ms / 1000); //Friction
+
+        //this.move.y *= Math.pow(0.9, ms / 1000); //Friction
+        //this.move.x *= Math.pow(0.9, ms / 1000); //Friction
         //this.move.y += 10; //Gravity
 
         const newHead = new Vector2(
-            this.head.x + this.move.x * ms / 1000,
-            this.head.y + this.move.y * ms / 1000
+            this.head.x + Math.cos(this.headRotation)* this.speed * ms / 1000,
+            this.head.y + Math.sin(this.headRotation)* this.speed * ms / 1000
         )
 
         let newSegments = [];
         newSegments.push(newHead);
 
 
-        let i=0,l=Math.min(this.segments.length,100)
+        let i=0,l=Math.min(this.segments.length,400);
         for(;i<l;i++){
             newSegments.push(this.segments[i]);
         }

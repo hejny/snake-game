@@ -44,13 +44,15 @@ export class Scene {
     }
 
 
-    draw() {
+    draw(duration:number) {
+
+        //console.log(duration);
 
         this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
         const self = this;
         this.objects.forEach(function(object) {
 
-            object.draw(self.ctx);
+            object.draw(self.ctx,duration);
 
         });
     }
