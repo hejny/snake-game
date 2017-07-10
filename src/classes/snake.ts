@@ -1,10 +1,15 @@
 import {Vector2} from './vector2';
+import {Scene} from './scene';
+
+
+
+
 
 export class Snake {
 
     public speed:number;
 
-    constructor(public segments: Vector2[],public headRotation: number, public size:number, public color='#000') {
+    constructor(public scene:Scene,public segments: Vector2[],public headRotation: number, public size:number, public color='#000') {
         this.speed = 100;
     }
 
@@ -12,7 +17,12 @@ export class Snake {
         return this.segments[0];//this.segments[this.segments.length-1];
     }
 
-    draw(ctx:CanvasRenderingContext2D,duration:number) {
+    draw() {
+
+
+        const ctx = this.scene.getContext();
+        //const canvasPosition = scene.countCanvasPosition(this.position);
+
 
         ctx.fillStyle = this.color;
         ctx.lineWidth = this.size;
@@ -28,7 +38,7 @@ export class Snake {
 
 
         let lastSegment,i=0;
-        for(let segment of this.segments){
+        for(let thisSegment of this.segments){
 
             i++;
 
@@ -37,11 +47,15 @@ export class Snake {
                 ctx.lineWidth = Math.sqrt(this.segments.length-i);
                 ctx.lineCap="round";
                 ctx.beginPath();
-                ctx.moveTo(lastSegment.x,lastSegment.y);
-                ctx.lineTo(segment.x,segment.y);
+
+                const lastSegmentCanvas = this.scene.countCanvasPosition(lastSegment);
+                const thisSegmentCanvas = this.scene.countCanvasPosition(thisSegment);
+
+                ctx.moveTo(lastSegmentCanvas.x,lastSegmentCanvas.y);
+                ctx.lineTo(thisSegmentCanvas.x,thisSegmentCanvas.y);
                 ctx.stroke();
             }
-            lastSegment = segment;
+            lastSegment = thisSegment;
 
 
         }

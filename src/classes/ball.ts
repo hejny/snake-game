@@ -1,23 +1,29 @@
 import {Vector2} from './vector2';
+import {Scene} from './scene';
 
 
 export class Ball {
 
     public disposed:boolean;
 
-    constructor(public position: Vector2,public move: Vector2, public size:number, public color='#000') {
+    constructor(public scene:Scene,public position: Vector2,public move: Vector2, public size:number, public color='#000') {
         this.disposed = false;
     }
 
-    draw(ctx:CanvasRenderingContext2D,duration:number) {
+    draw() {
 
         if(this.disposed)return;
+
+        const ctx = this.scene.getContext();
+        const canvasPosition = this.scene.countCanvasPosition(this.position);
+
+        console.log();
 
         ctx.fillStyle = this.color;
         ctx.beginPath();
         ctx.arc(
-            this.position.x,//+Math.cos(duration/100)*10,
-            this.position.y,//+Math.sin(duration/200)*10,
+            canvasPosition.x,//+Math.cos(duration/100)*10,
+            canvasPosition.y,//+Math.sin(duration/200)*10,
 
             this.size / 2, 0, Math.PI * 2, true);
         ctx.closePath();

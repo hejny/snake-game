@@ -1,16 +1,21 @@
+import {Vector2} from './vector2';
+
 export class Scene {
 
     public objects:any[];//todo object
 
-    constructor(public ctx) {
+    constructor(public ctx, public cameraPosition: Vector2) {
         this.objects = [];
     }
+
+
 
     addObject(object) {
         this.objects.push(object);
     }
 
     update(ms) {
+
 
         this.objects.forEach(function(object) {
 
@@ -43,6 +48,14 @@ export class Scene {
 
     }
 
+    getContext():CanvasRenderingContext2D{
+        return this.ctx;
+    }
+
+    countCanvasPosition(scenePosition:Vector2):Vector2{
+        return Vector2.add(Vector2.subtract(scenePosition,this.cameraPosition),new Vector2(this.ctx.canvas.width/2,this.ctx.canvas.height/2));
+    }
+
 
     draw(duration:number) {
 
@@ -50,9 +63,9 @@ export class Scene {
 
         this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
         const self = this;
-        this.objects.forEach(function(object) {
+        this.objects.forEach((object)=>{
 
-            object.draw(self.ctx,duration);
+            object.draw();
 
         });
     }
