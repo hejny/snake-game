@@ -14,12 +14,12 @@ export class Scene {
         this.objects.push(object);
     }
 
-    update(ms) {
+    update(duration,ms) {
 
 
         this.objects.forEach(function(object) {
 
-            object.update(ms);
+            object.update(duration,ms);
 
             /*
              //Bottom border

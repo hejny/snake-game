@@ -75,17 +75,20 @@ export class Snake {
 
     }
 
-    update(ms) {
+    update(duration,ms) {
 
 
         //this.move.y *= Math.pow(0.9, ms / 1000); //Friction
         //this.move.x *= Math.pow(0.9, ms / 1000); //Friction
         //this.move.y += 10; //Gravity
 
+
+        //const snakeSin = Math.sin(duration*10000)*0.7;
+
         const newHead = new Vector2(
             this.head.x + Math.cos(this.headRotation)* this.speed * ms / 1000,
             this.head.y + Math.sin(this.headRotation)* this.speed * ms / 1000
-        )
+        );
 
         let newSegments = [];
         newSegments.push(newHead);

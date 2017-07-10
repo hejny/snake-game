@@ -30,14 +30,14 @@ export class Ball {
         ctx.fill();
     }
 
-    update(ms) {
+    update(duration,ms) {
 
-        this.move.y *= Math.pow(0.9, ms / 1000); //Friction
+        /*this.move.y *= Math.pow(0.9, ms / 1000); //Friction
         this.move.x *= Math.pow(0.9, ms / 1000); //Friction
         //this.move.y += 10; //Gravity
 
         this.position.x += this.move.x * ms / 1000;
-        this.position.y += this.move.y * ms / 1000;
+        this.position.y += this.move.y * ms / 1000;*/
     }
 
 

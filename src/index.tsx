@@ -64,7 +64,7 @@ function drawLoop(timestamp) {
 
 
 
-    scene.update(ms);
+    scene.update(duration,ms);
     scene.cameraPosition = snake.head;
 
 
