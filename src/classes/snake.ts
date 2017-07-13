@@ -13,6 +13,10 @@ export class Snake {
         this.speed = 100;
     }
 
+    toJSON(){
+        return this.segments;
+    }
+
     get head(): Vector2{
         return this.segments[0];//this.segments[this.segments.length-1];
     }

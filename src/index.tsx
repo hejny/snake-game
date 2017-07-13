@@ -52,35 +52,116 @@ canvas.addEventListener('pointermove',(event)=>{
 });
 
 
+let running = false;
+let score = 0;
 
 const started = performance.now();
 let timestamp_last = performance.now();
 
 function drawLoop(timestamp) {
 
+
     const duration = timestamp - started;
     const ms = timestamp - timestamp_last;
     timestamp_last = timestamp;
 
 
+    if(running) {
 
-    scene.update(duration,ms);
-    scene.cameraPosition = snake.head;
+        scene.update(duration, ms);
+        scene.cameraPosition = snake.head;
 
 
+        for (let ball of balls) {
+            if(!ball.disposed) {
+                if (Vector2.distance(snake.head, ball.position) < 30) {
+                    ball.dispose();
+                    score++;
+                    gamee.updateScore(score);
 
-    for(let ball of balls){
-        if(Vector2.distance(snake.head,ball.position)<30){
-            ball.dispose();
-            //snake.size+=1;
-            //console.log(snake.size);
+                    //todo why Uncaught data provided to gameSave function must be object
+                    gamee.gameSave(snake);
+                    //snake.size+=1;
+                    //console.log(snake.size);
+                }
+            }
         }
+
+
+
+
     }
 
-
-
     scene.draw(duration);
-
     window.requestAnimationFrame(drawLoop);
 }
 window.requestAnimationFrame(drawLoop);
+
+
+
+
+//import gamee from 'gamee';
+
+
+const gamee = (window as any).gamee;
+
+
+
+gamee.gameInit("FullScreen", {}, ["saveState"], function(/*error,*/ data) {
+
+    console.log(data);
+
+    var myController = data.controller;
+    var sound = data.sound;
+
+
+    gamee.gameReady(function(error) {
+        if(error !== null){
+            console.warn(error)
+        }
+    });
+
+});
+
+
+
+// Will be emitted when user will start game or restart it.
+gamee.emitter.addEventListener("start", function(event) {
+   console.log('Gamee emits start.');
+
+    running = true;
+    event.detail.callback();
+});
+
+// Will be emitted when user paused the game.
+gamee.emitter.addEventListener("pause", function(event) {
+    console.log('Gamee emits pause.');
+
+    running = false;
+    event.detail.callback();
+});
+
+// Will be emitted after user resumes the game after
+// pause or GameeApp suspension.
+gamee.emitter.addEventListener("resume", function(event) {
+    console.log('Gamee emits resume.');
+
+    running = true;
+    event.detail.callback();
+});
+
+// Will be emitted when user clicks the mute button
+// and the game must mute all game sounds.
+gamee.emitter.addEventListener("mute", function(event) {
+    console.log('Gamee emits mute.');
+
+    event.detail.callback();
+});
+
+// Will be emitted when user clicks the unmute button
+// and the game should unmute all game sounds.
+gamee.emitter.addEventListener("unmute", function(event) {
+    console.log('Gamee emits unmute.');
+
+    event.detail.callback();
+});
