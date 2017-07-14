@@ -5,7 +5,8 @@
   "dependencies": {
     "gamee": "^2.0.0",
     "react": "^15.6.1",
-    "react-dom": "^15.6.1"
+    "react-dom": "^15.6.1",
+    "redux": "^3.7.2"
   },
   "devDependencies": {
     "react-scripts-ts": "^2.3.2"

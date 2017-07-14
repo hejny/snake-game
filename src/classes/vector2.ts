@@ -20,6 +20,13 @@ export class Vector2 {
             vectorA.y-vectorB.y
         ));
     }
-    
+
+    static random(rangeX,rangeY){
+        return(new Vector2(
+            (Math.random()-0.5)*rangeX,
+            (Math.random()-0.5)*rangeY
+        ))
+    }
+
 
 }
