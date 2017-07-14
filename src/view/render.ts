@@ -47,7 +47,7 @@ export function render(ctx, game:IGame){
 
         if(lastSegment){
             ctx.fillStyle = this.color;
-            ctx.lineWidth = Math.sqrt(game.snake.segments.length-i);
+            ctx.lineWidth = Math.sqrt(game.snake.segments.length-i);//todo via real length
             ctx.lineCap="round";
             ctx.beginPath();
 

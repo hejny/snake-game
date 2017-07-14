@@ -26,6 +26,9 @@ canvas.addEventListener('pointermove',(event)=>{
     const dy = canvas.height/2 - event.clientY;
 
     let rotation = Math.atan2(dy,dx)+Math.PI;
+
+    //todo if((rotation-game.snake.headRotation)%Math.PI)
+
     game.snake.headRotation = rotation;
 });
 
