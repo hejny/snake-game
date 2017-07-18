@@ -1,50 +1,19 @@
-import {IGame} from '../model/game'
+import {ISnake} from '../model/game'
 import {Vector2} from '../classes/vector2'
 
 
-export function render(ctx, game:IGame){
+export function renderSnake(ctx, snake:ISnake, center:Vector2, gameDuration:number){
 
-
-    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-
-
-    const snakeHead = game.snake.segments[0];
-    const center = new Vector2(
-        snakeHead.x - ctx.canvas.width/2,
-        snakeHead.y - ctx.canvas.height/2
-    );
-
-
-    //=============================================
-    for(let food of game.food){
-        ctx.fillStyle = this.color;
-        ctx.beginPath();
-        ctx.arc(
-            food.position.x-center.x,//+Math.cos(duration/100)*10,
-            food.position.y-center.y,//+Math.sin(duration/200)*10,
-
-            food.size / 2, 0, Math.PI * 2, true);
-        ctx.closePath();
-        ctx.fill();
-
-
-
-
-    }
-    //=============================================
-
-
-    //=============================================
     ctx.fillStyle = this.color;
     ctx.lineWidth = this.size;
     ctx.lineCap="round";
     ctx.beginPath();
 
 
-    //todo better
+    //todo better - maybe via reducer
     const snakeLengthSum = (()=> {
         let lastSegment, i = 0, snakeLengthSum = 0;
-        for (let thisSegment of game.snake.segments) {
+        for (let thisSegment of snake.segments) {
             i++;
             if (lastSegment) {
                 snakeLengthSum += Math.sqrt(Math.pow(lastSegment.y - thisSegment.y, 2) + Math.pow(lastSegment.x - thisSegment.x, 2));
@@ -57,7 +26,7 @@ export function render(ctx, game:IGame){
 
     let lastMoveBy=new Vector2(0,0);
     let lastSegment,i=0,snakeLength=0;
-    for(let thisSegment of game.snake.segments){
+    for(let thisSegment of snake.segments){
 
         i++;
 
@@ -67,8 +36,8 @@ export function render(ctx, game:IGame){
             const snakeFromHead = snakeLengthSum-snakeLength;
 
             const amplitude = Math.min(Math.sqrt(snakeLength/10),5),
-                  periode = 10,
-                  shift = ((new Date()).getTime()-game.started)/100//todo pure
+                periode = 10,
+                shift = gameDuration/100//todo pure
             ;
 
             const rotation = Math.PI/2 + Math.atan2(lastSegment.y-thisSegment.y,lastSegment.x-thisSegment.x);
@@ -97,6 +66,5 @@ export function render(ctx, game:IGame){
         lastSegment = thisSegment;
 
     }
-    //=============================================
 
 }

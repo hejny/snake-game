@@ -64,21 +64,21 @@ export function update(game:IGame){
 
 
         //=============================================
-        let newFood = [];
-        for (let food of game.food) {
+        let newFoods = [];
+        for (let food of game.foods) {
             if (Vector2.distance(newHead, food.position) < 30) {
 
                 game.score++;//todo pure
                 game.snake.length+=10;//todo pure
 
             } else {
-                newFood.push(food);
+                newFoods.push(food);
             }
         }
 
 
         //todo pure
-        game.food = newFood;
+        game.foods = newFoods;
         //=============================================
 
     }

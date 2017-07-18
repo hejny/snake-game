@@ -1,7 +1,7 @@
 import './style/index.css';
 import {createGame,IGame} from './model/game';
 import {update} from './model/update';
-import {render} from './view/render';
+import {render} from './render/render';
 const gamee = (window as any).gamee;//todo import gamee from 'gamee';
 
 
