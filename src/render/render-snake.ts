@@ -2,7 +2,7 @@ import {ISnake} from '../model/game'
 import {Vector2} from '../classes/vector2'
 
 
-export function renderSnake(ctx, snake:ISnake, center:Vector2, gameDuration:number){
+export function renderSnake(ctx:CanvasRenderingContext2D, snake:ISnake, center:Vector2, gameDuration:number){
 
     ctx.fillStyle = this.color;
     ctx.lineWidth = this.size;

@@ -2,7 +2,7 @@ import {IFood} from '../model/game'
 import {Vector2} from '../classes/vector2'
 
 //todo correct english word foods?
-export function renderFoods(ctx, foods:IFood[], center:Vector2){
+export function renderFoods(ctx:CanvasRenderingContext2D, foods:IFood[], center:Vector2){
 
 
     for(let food of foods){

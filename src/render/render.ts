@@ -4,7 +4,7 @@ import {renderSnake} from './render-snake'
 import {renderFoods} from './render-foods'
 import {renderWalls} from './render-walls'
 
-export function render(ctx, game:IGame){
+export function render(ctx:CanvasRenderingContext2D, game:IGame){
 
 
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
