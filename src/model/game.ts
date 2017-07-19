@@ -47,12 +47,31 @@ export function createGame():IGame{
 
 
     let walls=[];
-    for (var i = 0; i < 100; i++) {
+
+
+    walls.push({
+        position: new Vector2(250,0),
+        size: new Vector2(10,500),
+    });
+    walls.push({
+        position: new Vector2(-250,0),
+        size: new Vector2(10,500),
+    });
+    walls.push({
+        position: new Vector2(0,250),
+        size: new Vector2(500,10),
+    });
+    walls.push({
+        position: new Vector2(0,-250),
+        size: new Vector2(500,10),
+    });
+
+    /*for (var i = 0; i < 100; i++) {
         walls.push({
             position:Vector2.random(500,500),
             size: Vector2.random(50,50),
         });
-    }
+    }*/
 
 
 

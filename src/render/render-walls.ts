@@ -6,8 +6,8 @@ export function renderWalls(ctx:CanvasRenderingContext2D, walls:IWall[], center:
     for(let wall of walls){
         ctx.fillStyle = this.color;
         ctx.fillRect(
-            wall.position.x-center.x,
-            wall.position.y-center.y,
+            wall.position.x-wall.size.x/2-center.x,
+            wall.position.y-wall.size.y/2-center.y,
             wall.size.x,
             wall.size.y
 

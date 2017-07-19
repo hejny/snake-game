@@ -36,8 +36,8 @@ export function renderSnake(ctx:CanvasRenderingContext2D, snake:ISnake, center:V
             const snakeFromHead = snakeLengthSum-snakeLength;
 
             const amplitude = Math.min(Math.sqrt(snakeLength/10),5),
-                periode = 10,
-                shift = gameDuration/100//todo pure
+                periode = 30,
+                shift = gameDuration/500//todo pure
             ;
 
             const rotation = Math.PI/2 + Math.atan2(lastSegment.y-thisSegment.y,lastSegment.x-thisSegment.x);
