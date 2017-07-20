@@ -53,18 +53,6 @@ export function wallCollide(wall:IWall,point:Vector2):boolean{
 export function createGame():IGame{
 
 
-
-    let foods=[];
-    for (var i = 0; i < 100; i++) {
-        foods.push({
-            position:Vector2.random(500,500),
-            size: Math.random()*10+10,
-        });
-    }
-
-
-
-
     let walls=[];
 
     walls.push({
@@ -76,6 +64,43 @@ export function createGame():IGame{
         position: new Vector2(0,250),
         size: new Vector2(250,1000),
     });
+
+
+
+
+    const foodsRatio = 0.01;
+    let foods=[];
+
+    for(let wall of walls){
+
+        const volume = wall.size.x * wall.size.y;
+        let volumeFoods = 0;
+
+        while (volumeFoods < volume*foodsRatio) {
+
+            const size = Math.random()*10+10;
+
+            volumeFoods += Math.PI*size*size/4;
+
+            foods.push({
+                position:Vector2.random(wall.size.x,wall.size.y,wall.position.x,wall.position.y),
+                size
+            });
+
+        }
+    }
+
+
+    /*for (var i = 0; i < 100; i++) {
+        foods.push({
+            position:Vector2.random(500,500),
+            size: Math.random()*10+10,
+        });
+    }*/
+
+
+
+
 
     /*walls.push({
         position: new Vector2(250,0),

@@ -18,29 +18,11 @@ let game:IGame=null;// = createGame();
 
 
 
-
-canvas.addEventListener('pointermove',(event)=>{
-
-    if(game) {
-        const dx = canvas.width / 2 - event.clientX;
-        const dy = canvas.height / 2 - event.clientY;
-
-        let rotation = Math.atan2(dy, dx) + Math.PI;
-
-
-        /*if(rotation>Math.PI){
-
-         rotation=0.1;
-
-         }else{
-
-         rotation=-0.1;
-
-         }*/
-        //todo if((rotation-game.snake.headRotation)%Math.PI)
-
-        game.snake.headRotation = rotation;
-    }
+let cursorRotation = 0;
+canvas.addEventListener('pointermove',(event)=> {
+    const dx = canvas.width / 2 - event.clientX;
+    const dy = canvas.height / 2 - event.clientY;
+    cursorRotation = Math.atan2(dy, dx) + Math.PI;
 });
 
 
@@ -49,7 +31,7 @@ canvas.addEventListener('pointermove',(event)=>{
 
 function drawLoop() {
     if(game) {
-        game = update(game);
+        game = update(game,cursorRotation);
 
         if(!game){
             gamee.gameOver();

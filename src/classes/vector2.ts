@@ -21,10 +21,10 @@ export class Vector2 {
         ));
     }
 
-    static random(rangeX,rangeY){
+    static random(rangeX,rangeY,centerX=0,centerY=0){
         return(new Vector2(
-            (Math.random()-0.5)*rangeX,
-            (Math.random()-0.5)*rangeY
+            (Math.random()-0.5)*rangeX+centerX,
+            (Math.random()-0.5)*rangeY+centerY
         ))
     }
 

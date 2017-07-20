@@ -2,7 +2,7 @@ import {IGame,wallCollide, IGamePhase} from './game'
 import {Vector2} from '../classes/vector2'
 
 //todo should thare be gamee DI?
-export function update(game:IGame):IGame{
+export function update(game:IGame,cursorRotation:number):IGame{
 
 
     const lastUpdated = game.updated;
@@ -14,6 +14,10 @@ export function update(game:IGame):IGame{
 
 
     if(game.phase === IGamePhase.PLAY) {
+
+
+        game.snake.headRotation = cursorRotation;
+
 
 
         //=============================================
