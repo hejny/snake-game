@@ -6,8 +6,8 @@ import {renderWalls} from './render-walls'
 
 export function render(ctx:CanvasRenderingContext2D, game:IGame){
 
-
-    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    ctx.fillStyle = 'black';
+    ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
 
     const snakeHead = game.snake.segments[0];
@@ -16,7 +16,8 @@ export function render(ctx:CanvasRenderingContext2D, game:IGame){
         snakeHead.y - ctx.canvas.height/2
     );
 
-    renderSnake(ctx,game.snake,center,(new Date()).getTime()-game.started);
-    renderFoods(ctx,game.foods,center);
+
     renderWalls(ctx,game.walls,center);
+    renderFoods(ctx,game.foods,center);
+    renderSnake(ctx,game.snake,center,(new Date()).getTime()-game.started);
 }

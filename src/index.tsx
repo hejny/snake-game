@@ -1,5 +1,5 @@
 import './style/index.css';
-import {createGame,IGame} from './model/game';
+import {createGame,IGame,IGamePhase} from './model/game';
 import {update} from './model/update';
 import {render} from './render/render';
 const gamee = (window as any).gamee;//todo import gamee from 'gamee';
@@ -14,48 +14,56 @@ const ctx = canvas.getContext("2d");
 
 
 
-let game:IGame = createGame();
-
+let game:IGame=null;// = createGame();
 
 
 
 
 canvas.addEventListener('pointermove',(event)=>{
 
-    const dx = canvas.width/2  - event.clientX;
-    const dy = canvas.height/2 - event.clientY;
+    if(game) {
+        const dx = canvas.width / 2 - event.clientX;
+        const dy = canvas.height / 2 - event.clientY;
 
-    let rotation = Math.atan2(dy,dx)+Math.PI;
+        let rotation = Math.atan2(dy, dx) + Math.PI;
 
-    //todo if((rotation-game.snake.headRotation)%Math.PI)
 
-    game.snake.headRotation = rotation;
+        /*if(rotation>Math.PI){
+
+         rotation=0.1;
+
+         }else{
+
+         rotation=-0.1;
+
+         }*/
+        //todo if((rotation-game.snake.headRotation)%Math.PI)
+
+        game.snake.headRotation = rotation;
+    }
 });
 
 
 
 
 
-
 function drawLoop() {
+    if(game) {
+        game = update(game);
 
+        if(!game){
+            gamee.gameOver();
+        }else {
 
-    game = update(game);
+            gamee.updateScore(game.score);
+            gamee.gameSave(game);//todo why Uncaught data provided to gameSave function must be object
+            render(ctx, game);
+        }
 
-    gamee.updateScore(game.score);
-
-
-
-    gamee.gameSave(game);//todo why Uncaught data provided to gameSave function must be object
-
-
-
-    render(ctx,game);
-
+    }
 
     window.requestAnimationFrame(drawLoop);
 }
-
 
 
 
@@ -83,7 +91,8 @@ gamee.gameInit("FullScreen", {}, ["saveState"], function(/*error,*/ data) {
 gamee.emitter.addEventListener("start", function(event) {
     console.log('Gamee emits start.');
 
-    game.running = true;//todo send action
+    game = createGame();
+    //game.phase = IGamePhase.PLAY;//todo send action
     event.detail.callback();
 });
 
@@ -91,7 +100,7 @@ gamee.emitter.addEventListener("start", function(event) {
 gamee.emitter.addEventListener("pause", function(event) {
     console.log('Gamee emits pause.');
 
-    game.running = false;//todo send action
+    game.phase = IGamePhase.PAUSE;//todo send action
     event.detail.callback();
 });
 
@@ -100,7 +109,7 @@ gamee.emitter.addEventListener("pause", function(event) {
 gamee.emitter.addEventListener("resume", function(event) {
     console.log('Gamee emits resume.');
 
-    game.running = true;//todo send action
+    game.phase = IGamePhase.PLAY;//todo send action
     event.detail.callback();
 });
 

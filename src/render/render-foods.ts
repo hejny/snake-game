@@ -6,7 +6,7 @@ export function renderFoods(ctx:CanvasRenderingContext2D, foods:IFood[], center:
 
 
     for(let food of foods){
-        ctx.fillStyle = this.color;
+        ctx.fillStyle = 'black';
         ctx.beginPath();
         ctx.arc(
             food.position.x-center.x,//+Math.cos(duration/100)*10,

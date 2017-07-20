@@ -1,8 +1,8 @@
-import {IGame} from './game'
+import {IGame,wallCollide, IGamePhase} from './game'
 import {Vector2} from '../classes/vector2'
 
-
-export function update(game:IGame){
+//todo should thare be gamee DI?
+export function update(game:IGame):IGame{
 
 
     const lastUpdated = game.updated;
@@ -13,7 +13,7 @@ export function update(game:IGame){
 
 
 
-    if(game.running) {
+    if(game.phase === IGamePhase.PLAY) {
 
 
         //=============================================
@@ -66,7 +66,7 @@ export function update(game:IGame){
         //=============================================
         let newFoods = [];
         for (let food of game.foods) {
-            if (Vector2.distance(newHead, food.position) < 30) {
+            if (Vector2.distance(newHead, food.position) < food.size) {
 
                 game.score++;//todo pure
                 game.snake.length+=10;//todo pure
@@ -80,6 +80,28 @@ export function update(game:IGame){
         //todo pure
         game.foods = newFoods;
         //=============================================
+
+
+
+        //=============================================
+
+        let isOnWall = false;
+        for (let wall of game.walls) {
+            if (wallCollide(wall,newHead)) {
+                isOnWall = true;
+            }
+        }
+        if(!isOnWall){
+            //alert(1);
+             //IGamePhase.AFTER;
+            return null;
+        }
+        //=============================================
+
+
+
+
+
 
     }
 

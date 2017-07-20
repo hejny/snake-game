@@ -10,22 +10,41 @@ export interface IFood{
     position: Vector2;
     size: number;
 }
+/*export enum IWallType {
+    WALL,
+    SPACE
+}*/
 export interface IWall{
     position: Vector2;
     size: Vector2;
+    //type: IWallType
 }
 
-
+export enum IGamePhase {
+    //BEFORE,
+    PLAY,
+    PAUSE,
+    //AFTER
+}
 export interface IGame{
     started: number;
     updated: number;
-    running: boolean;
+    phase: IGamePhase;
     score: number;
     snake: ISnake;
     foods: IFood[];
     walls: IWall[];
 }
 
+//todo separate files for snake, food, wall
+export function wallCollide(wall:IWall,point:Vector2):boolean{
+    return(
+        wall.position.x+wall.size.x/2>=point.x &&
+        wall.position.y+wall.size.y/2>=point.y &&
+        wall.position.x-wall.size.x/2<=point.x &&
+        wall.position.y-wall.size.y/2<=point.y
+    )
+}
 
 
 
@@ -48,8 +67,17 @@ export function createGame():IGame{
 
     let walls=[];
 
+    walls.push({
+        position: new Vector2(0,0),
+        size: new Vector2(500,500),
+    });
 
     walls.push({
+        position: new Vector2(0,250),
+        size: new Vector2(250,1000),
+    });
+
+    /*walls.push({
         position: new Vector2(250,0),
         size: new Vector2(10,500),
     });
@@ -64,7 +92,7 @@ export function createGame():IGame{
     walls.push({
         position: new Vector2(0,-250),
         size: new Vector2(500,10),
-    });
+    });*/
 
     /*for (var i = 0; i < 100; i++) {
         walls.push({
@@ -81,7 +109,7 @@ export function createGame():IGame{
         updated: (new Date()).getTime()+1000,
 
 
-        running: false,
+        phase: IGamePhase.PLAY,
         score: 0,
 
 
@@ -90,9 +118,7 @@ export function createGame():IGame{
             length: 100,
             headRotation: 0,
             segments:[
-                {x: 0, y: 0},
-                {x: 1, y: 0},
-                {x: 2, y: 0}
+                {x: 0, y: 0}
             ]
 
 
