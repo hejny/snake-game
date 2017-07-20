@@ -131,7 +131,7 @@ export function createGame():IGame{
     return {
 
         started: (new Date()).getTime(),
-        updated: (new Date()).getTime()+1000,
+        updated: null,
 
 
         phase: IGamePhase.PLAY,

@@ -5,13 +5,14 @@ import {Vector2} from '../classes/vector2'
 export function update(game:IGame,cursorRotation:number):IGame{
 
 
-    const lastUpdated = game.updated;
-    game.updated = new Date().getTime();//todo pure
+    const lastUpdated = game.updated || game.started;
+    game.updated = (new Date()).getTime();//todo pure
 
     const durationGame = game.updated - game.started;
     const durationTick = game.updated - lastUpdated;
 
 
+    //console.log(durationTick);
 
     if(game.phase === IGamePhase.PLAY) {
 
