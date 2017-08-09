@@ -1,5 +1,6 @@
-import {IGame,wallCollide, IGamePhase} from './game'
+import {IGame, wallCollide, wallMirror, IGamePhase, IWall} from './game'
 import {Vector2} from '../classes/vector2'
+import {Line2} from "../classes/line2";
 
 //todo should thare be gamee DI?
 export function update(game:IGame,cursorRotation:number):IGame{
@@ -9,7 +10,7 @@ export function update(game:IGame,cursorRotation:number):IGame{
     game.updated = (new Date()).getTime();//todo pure
 
     const durationGame = game.updated - game.started;
-    const durationTick = game.updated - lastUpdated;
+    const durationTick = Math.min(game.updated - lastUpdated,100);
 
 
     //console.log(durationTick);
@@ -17,11 +18,28 @@ export function update(game:IGame,cursorRotation:number):IGame{
     if(game.phase === IGamePhase.PLAY) {
 
 
-        game.snake.headRotation = cursorRotation;
 
+        //=============================================Snake rotation
+        //todo better
+        const currentRotation = game.snake.headRotation;
+        const diff1 = (currentRotation-cursorRotation+10*(Math.PI*2))%(Math.PI*2)
+        const diff2 = (cursorRotation-currentRotation+10*(Math.PI*2))%(Math.PI*2)
 
+        //console.log(diff1,diff2);
 
+        if(diff1>diff2){
+            game.snake.headRotation += 0.006 * durationTick;
+        }else{
+            game.snake.headRotation -= 0.006 * durationTick;
+        }
         //=============================================
+
+
+
+
+
+
+        //=============================================Snake movement
         const speed = 100;
         const oldHead = game.snake.segments[0];
 
@@ -61,14 +79,15 @@ export function update(game:IGame,cursorRotation:number):IGame{
 
 
 
-
-
         //todo pure
         game.snake.segments = newSegments;
         //=============================================
 
 
-        //=============================================
+
+
+
+        //=============================================Collision on food
         let newFoods = [];
         for (let food of game.foods) {
             if (Vector2.distance(newHead, food.position) < food.size) {
@@ -88,23 +107,92 @@ export function update(game:IGame,cursorRotation:number):IGame{
 
 
 
-        //=============================================
+
+        //=============================================Collision on walls
 
         let isOnWall = false;
-        for (let wall of game.walls) {
+        for (let wall of game.walls) {//todo via some
             if (wallCollide(wall,newHead)) {
                 isOnWall = true;
             }
         }
         if(!isOnWall){
-            //alert(1);
-             //IGamePhase.AFTER;
+            console.log('Collision on walls');
             return null;
         }
         //=============================================
 
 
 
+        //=============================================Collision on snake
+        let lastPoint:Vector2=null;
+        let firstLine:Line2=null;
+        let otherLines:Line2[]=[];
+
+
+        for (let currentPoint of game.snake.segments) {
+            if(lastPoint){
+                if(!firstLine){
+                    firstLine = new Line2(lastPoint,currentPoint);
+                }else{
+                    otherLines.push(new Line2(lastPoint,currentPoint));
+                }
+            }
+            lastPoint=currentPoint;
+        }
+
+        const isOnSnake = otherLines.some((line)=>{
+            //console.log(line,firstLine,line.collideLine(firstLine));
+            return line.collideLine(firstLine,false);
+        });
+
+
+        if(isOnSnake){
+            console.log('Collision on snake');
+            return null;
+        }
+        //=============================================
+
+
+
+        //=============================================Movement of foods
+        const snakeHead = game.snake.segments[0];
+
+        for (let food of game.foods) {
+
+
+            let onWalls1: IWall[] = [];
+            for (let wall of game.walls) {
+                if (wallCollide(wall, food.position)) {
+                    onWalls1.push(wall);
+                }
+            }
+
+
+            const rotation = Math.atan2(food.position.y - snakeHead.y, food.position.x - snakeHead.x);
+            food.position.x += Math.cos(rotation)*food.speed*durationTick;
+            food.position.y += Math.sin(rotation)*food.speed*durationTick;
+
+
+
+            let onWalls2: IWall[] = [];
+            for (let wall of game.walls) {
+                if (wallCollide(wall, food.position)) {
+                    onWalls2.push(wall);
+                }
+            }
+
+
+            if(onWalls2.length===0){
+                const wall = onWalls1[0];
+
+                food.position = Vector2.random(wall.size.x,wall.size.y,wall.position.x,wall.position.y);
+                //food.position = wallMirror(wall,food.position);
+            }
+
+
+        }
+        //=============================================
 
 
 

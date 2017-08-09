@@ -9,6 +9,7 @@ export interface ISnake{
 export interface IFood{
     position: Vector2;
     size: number;
+    speed: number;
 }
 /*export enum IWallType {
     WALL,
@@ -46,7 +47,12 @@ export function wallCollide(wall:IWall,point:Vector2):boolean{
     )
 }
 
-
+export function wallMirror(wall:IWall,point:Vector2):Vector2{
+    if(!(wall.position.x+wall.size.x/2>=point.x))return new Vector2(point.x-wall.size.x,point.y);
+    if(!(wall.position.y+wall.size.y/2>=point.y))return new Vector2(point.x,point.y-wall.size.y);
+    if(!(wall.position.x-wall.size.x/2<=point.x))return new Vector2(point.x+wall.size.x,point.y);
+    if(!(wall.position.y-wall.size.y/2<=point.y))return new Vector2(point.x,point.y+wall.size.y);
+}
 
 
 
@@ -79,12 +85,13 @@ export function createGame():IGame{
         while (volumeFoods < volume*foodsRatio) {
 
             const size = Math.random()*10+10;
+            const speed = (Math.random()-0.2)*0.1;
 
             volumeFoods += Math.PI*size*size/4;
 
             foods.push({
                 position:Vector2.random(wall.size.x,wall.size.y,wall.position.x,wall.position.y),
-                size
+                size,speed
             });
 
         }

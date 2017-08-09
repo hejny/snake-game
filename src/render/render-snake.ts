@@ -35,7 +35,7 @@ export function renderSnake(ctx:CanvasRenderingContext2D, snake:ISnake, center:V
             snakeLength += Math.sqrt(Math.pow(lastSegment.y-thisSegment.y,2)+Math.pow(lastSegment.x-thisSegment.x,2));
             const snakeFromHead = snakeLengthSum-snakeLength;
 
-            const amplitude = Math.min(Math.sqrt(snakeLength/10),5),
+            /*const amplitude = Math.min(Math.sqrt(snakeLength/10),5),
                 periode = 30,
                 shift = Math.sqrt(Math.pow(snake.segments[0].x,2)+Math.pow(snake.segments[0].y,2))/10//gameDuration/500
             ;
@@ -46,7 +46,8 @@ export function renderSnake(ctx:CanvasRenderingContext2D, snake:ISnake, center:V
             const thisMoveBy = new Vector2(
                 Math.cos(rotation)*amplitude2,
                 Math.sin(rotation)*amplitude2
-            );
+            );**/
+            const thisMoveBy = new Vector2(0,0);
 
             ctx.fillStyle = this.color;
             ctx.lineWidth = Math.sqrt(snakeFromHead);//todo via real length

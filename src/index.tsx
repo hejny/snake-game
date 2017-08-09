@@ -1,4 +1,5 @@
 import './style/index.css';
+import * as _ from "lodash";
 import {createGame,IGame,IGamePhase} from './model/game';
 import {update} from './model/update';
 import {render} from './render/render';
@@ -27,6 +28,10 @@ canvas.addEventListener('pointermove',(event)=> {
 
 
 
+const updateState = _.debounce(function(game:IGame){
+    gamee.gameSave(game);//todo why Uncaught data provided to gameSave function must be object
+},1000);
+
 
 
 function drawLoop() {
@@ -37,9 +42,10 @@ function drawLoop() {
             gamee.gameOver();
         }else {
 
+            updateState(game);
             gamee.updateScore(game.score);
-            gamee.gameSave(game);//todo why Uncaught data provided to gameSave function must be object
             render(ctx, game);
+
         }
 
     }
@@ -49,10 +55,15 @@ function drawLoop() {
 
 
 
-
+let saveState: IGame = null;
 gamee.gameInit("FullScreen", {}, ["saveState"], function(/*error,*/ data) {
 
-    console.log(data);
+
+    try{
+        saveState = JSON.parse(data.saveState);
+    }catch(error){
+        console.warn(error);
+    }
 
 
     gamee.gameReady(function(error) {
@@ -73,7 +84,13 @@ gamee.gameInit("FullScreen", {}, ["saveState"], function(/*error,*/ data) {
 gamee.emitter.addEventListener("start", function(event) {
     console.log('Gamee emits start.');
 
-    game = createGame();
+    if(saveState){
+        game = saveState;
+        game.updated = (new Date()).getTime();
+    }else{
+        game = createGame();
+    }
+
     //game.phase = IGamePhase.PLAY;//todo send action
     event.detail.callback();
 });
@@ -92,6 +109,7 @@ gamee.emitter.addEventListener("resume", function(event) {
     console.log('Gamee emits resume.');
 
     game.phase = IGamePhase.PLAY;//todo send action
+    game.updated = (new Date()).getTime();
     event.detail.callback();
 });
 

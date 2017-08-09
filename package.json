@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": false,
   "dependencies": {
+    "@types/lodash": "^4.14.71",
+    "lodash": "^4.17.4",
     "gamee": "^2.0.0",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
