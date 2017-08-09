@@ -17,7 +17,12 @@ export function render(ctx:CanvasRenderingContext2D, game:IGame){
     );
 
 
-    renderWalls(ctx,game.walls,center);
+    renderWalls(ctx,2,game.walls,center);
+    renderWalls(ctx,1,game.walls,center);
     renderFoods(ctx,game.foods,center);
     renderSnake(ctx,game.snake,center,(new Date()).getTime()-game.started);
+
+
+
+
 }
