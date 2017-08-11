@@ -169,9 +169,9 @@ export function update(game:IGame,cursorRotation:number):IGame{
             }
 
 
-            const rotation = Math.atan2(food.position.y - snakeHead.y, food.position.x - snakeHead.x);
-            food.position.x += Math.cos(rotation)*food.speed*durationTick;
-            food.position.y += Math.sin(rotation)*food.speed*durationTick;
+            food.rotation = Math.atan2(food.position.y - snakeHead.y, food.position.x - snakeHead.x);
+            food.position.x += Math.cos(food.rotation)*food.speed*durationTick;
+            food.position.y += Math.sin(food.rotation)*food.speed*durationTick;
 
 
 

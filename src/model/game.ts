@@ -8,6 +8,7 @@ export interface ISnake{
 }
 export interface IFood{
     position: Vector2;
+    rotation: number;
     size: number;
     speed: number;
 }
@@ -91,6 +92,7 @@ export function createGame():IGame{
 
             foods.push({
                 position:Vector2.random(wall.size.x,wall.size.y,wall.position.x,wall.position.y),
+                rotation:0,
                 size,speed
             });
 

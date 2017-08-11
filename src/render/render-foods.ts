@@ -4,18 +4,12 @@ import {Vector2} from '../classes/vector2'
 
 
 var imgOrig = document.createElement("img");
-var img = document.createElement("canvas");
 //todo onload
 //todo process.env.PUBLIC_URL
-imgOrig.setAttribute('src', '/assets/images/objects/mouse/1.png');
+imgOrig.src = '/assets/images/objects/mouse/1.png';
 
 
-img.getContext('2d');
 
-//ctx.translate(image.width/2,image.height/2);
-//ctx.rotate(degrees*Math.PI/180);
-//ctx.drawImage(image,0,0,image.width,image.height,-image.width/2,-image.height   /2,image.width,image.height);
-//ctx.restore();
 
 
 
@@ -29,11 +23,28 @@ export function renderFoods(ctx:CanvasRenderingContext2D, foods:IFood[], center:
     for(let food of foods){
 
 
-        ctx.drawImage(imgOrig,
+        //ctx.translate(center.x, center.y);
+        //context.rotate(0.5);
+        //ctx.rotate(0.0005);
+
+
+
+        var canvas = document.createElement("canvas");
+        canvas.width = 50;//food.size*2;
+        canvas.height = canvas.width * 2;
+        const ctxX = canvas.getContext('2d');
+        ctxX.translate(25,50);
+        ctxX.rotate(food.rotation+Math.PI/2);
+        ctxX.translate(-25,-50);
+        ctxX.drawImage(imgOrig,0,0,canvas.width,canvas.height);
+
+
+
+
+
+        ctx.drawImage(canvas,
             food.position.x-center.x,
-            food.position.y-center.y,
-            50,
-            100
+            food.position.y-center.y
         );
 
 
@@ -47,6 +58,9 @@ export function renderFoods(ctx:CanvasRenderingContext2D, foods:IFood[], center:
             food.size / 2, 0, Math.PI * 2, true);
         ctx.closePath();
         ctx.fill();*/
+
+
+        //ctx.restore()
 
 
 
