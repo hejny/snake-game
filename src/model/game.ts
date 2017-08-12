@@ -48,11 +48,22 @@ export function wallCollide(wall:IWall,point:Vector2):boolean{
     )
 }
 
-export function wallMirror(wall:IWall,point:Vector2):Vector2{
+/*export function wallMirror(wall:IWall,point:Vector2):Vector2{
     if(!(wall.position.x+wall.size.x/2>=point.x))return new Vector2(point.x-wall.size.x,point.y);
     if(!(wall.position.y+wall.size.y/2>=point.y))return new Vector2(point.x,point.y-wall.size.y);
     if(!(wall.position.x-wall.size.x/2<=point.x))return new Vector2(point.x+wall.size.x,point.y);
     if(!(wall.position.y-wall.size.y/2<=point.y))return new Vector2(point.x,point.y+wall.size.y);
+}*/
+
+
+export function wallSnap(wall:IWall,point:Vector2):Vector2{
+    let x = point.x;
+    let y = point.y;
+    if(!(wall.position.x+wall.size.x/2>=point.x))x=wall.position.x+wall.size.x/2;
+    if(!(wall.position.y+wall.size.y/2>=point.y))y=wall.position.y+wall.size.y/2;
+    if(!(wall.position.x-wall.size.x/2<=point.x))x=wall.position.x-wall.size.x/2;
+    if(!(wall.position.y-wall.size.y/2<=point.y))y=wall.position.y-wall.size.y/2;
+    return new Vector2(x,y);
 }
 
 

@@ -1,4 +1,4 @@
-import {IGame, wallCollide, wallMirror, IGamePhase, IWall} from './game'
+import {IGame, wallCollide, wallSnap, IGamePhase, IWall} from './game'
 import {Vector2} from '../classes/vector2'
 import {Line2} from "../classes/line2";
 
@@ -187,8 +187,8 @@ export function update(game:IGame,cursorRotation:number):IGame{
             if(onWalls2.length===0){
                 const wall = onWalls1[0];
 
-                food.position = Vector2.random(wall.size.x,wall.size.y,wall.position.x,wall.position.y);
-                //food.position = wallMirror(wall,food.position);
+                //food.position = Vector2.random(wall.size.x,wall.size.y,wall.position.x,wall.position.y);
+                food.position = wallSnap(wall,food.position);
             }
 
 

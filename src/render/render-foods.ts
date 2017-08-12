@@ -44,7 +44,7 @@ export function renderFoods(ctx:CanvasRenderingContext2D, foods:IFood[], duratio
         const index = Math.floor(durationGame*food.speed)%100;
         const imgOrig = imgsOrigs[index];
 
-        console.log(imgsOrigs,index,imgOrig);
+        //console.log(imgsOrigs,index,imgOrig);
 
 
 
