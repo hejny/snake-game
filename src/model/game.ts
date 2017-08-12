@@ -39,12 +39,12 @@ export interface IGame{
 }
 
 //todo separate files for snake, food, wall
-export function wallCollide(wall:IWall,point:Vector2):boolean{
+export function wallCollide(wall:IWall,point:Vector2,bounds:number=0):boolean{
     return(
-        wall.position.x+wall.size.x/2>=point.x &&
-        wall.position.y+wall.size.y/2>=point.y &&
-        wall.position.x-wall.size.x/2<=point.x &&
-        wall.position.y-wall.size.y/2<=point.y
+        wall.position.x+wall.size.x/2-bounds>=point.x &&
+        wall.position.y+wall.size.y/2-bounds>=point.y &&
+        wall.position.x-wall.size.x/2+bounds<=point.x &&
+        wall.position.y-wall.size.y/2+bounds<=point.y
     )
 }
 
@@ -56,13 +56,13 @@ export function wallCollide(wall:IWall,point:Vector2):boolean{
 }*/
 
 
-export function wallSnap(wall:IWall,point:Vector2):Vector2{
+export function wallSnap(wall:IWall,point:Vector2,bounds:number=0):Vector2{
     let x = point.x;
     let y = point.y;
-    if(!(wall.position.x+wall.size.x/2>=point.x))x=wall.position.x+wall.size.x/2;
-    if(!(wall.position.y+wall.size.y/2>=point.y))y=wall.position.y+wall.size.y/2;
-    if(!(wall.position.x-wall.size.x/2<=point.x))x=wall.position.x-wall.size.x/2;
-    if(!(wall.position.y-wall.size.y/2<=point.y))y=wall.position.y-wall.size.y/2;
+    if(wall.position.x+wall.size.x/2-bounds<point.x)x=wall.position.x+wall.size.x/2-bounds;
+    if(wall.position.y+wall.size.y/2-bounds<point.y)y=wall.position.y+wall.size.y/2-bounds;
+    if(wall.position.x-wall.size.x/2+bounds>point.x)x=wall.position.x-wall.size.x/2+bounds;
+    if(wall.position.y-wall.size.y/2+bounds>point.y)y=wall.position.y-wall.size.y/2+bounds;
     return new Vector2(x,y);
 }
 

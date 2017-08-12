@@ -157,6 +157,7 @@ export function update(game:IGame,cursorRotation:number):IGame{
 
 
         //=============================================Movement of foods
+        const bounds = 20;
         const snakeHead = game.snake.segments[0];
 
         for (let food of game.foods) {
@@ -164,31 +165,43 @@ export function update(game:IGame,cursorRotation:number):IGame{
 
             let onWalls1: IWall[] = [];
             for (let wall of game.walls) {
-                if (wallCollide(wall, food.position)) {
+                if (wallCollide(wall, food.position,bounds)) {
                     onWalls1.push(wall);
                 }
             }
 
 
             food.rotation = Math.atan2(food.position.y - snakeHead.y, food.position.x - snakeHead.x);
-            food.position.x += Math.cos(food.rotation)*food.speed*durationTick;
-            food.position.y += Math.sin(food.rotation)*food.speed*durationTick;
+            const previousFoodPosition = food.position;
 
+            food.position = new Vector2(
+                food.position.x + Math.cos(food.rotation)*food.speed*durationTick,
+                food.position.y + Math.sin(food.rotation)*food.speed*durationTick
+            );
 
 
             let onWalls2: IWall[] = [];
             for (let wall of game.walls) {
-                if (wallCollide(wall, food.position)) {
+                if (wallCollide(wall, food.position,bounds)) {
                     onWalls2.push(wall);
                 }
             }
 
 
             if(onWalls2.length===0){
+
+                console.log(onWalls1,onWalls2);
+
                 const wall = onWalls1[0];
 
                 //food.position = Vector2.random(wall.size.x,wall.size.y,wall.position.x,wall.position.y);
-                food.position = wallSnap(wall,food.position);
+                food.position = wallSnap(wall,food.position,bounds);
+
+
+                food.rotation = Math.atan2(food.position.y-previousFoodPosition.y,food.position.x-previousFoodPosition.x);
+
+
+
             }
 
 

@@ -68,8 +68,8 @@ export function renderFoods(ctx:CanvasRenderingContext2D, foods:IFood[], duratio
 
 
         ctx.drawImage(canvas,
-            food.position.x-center.x,
-            food.position.y-center.y,
+            food.position.x-center.x-50,
+            food.position.y-center.y-50,
             100,100
         );
 
