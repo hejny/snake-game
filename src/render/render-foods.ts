@@ -29,20 +29,20 @@ export function renderFoods(ctx:CanvasRenderingContext2D, foods:IFood[], center:
 
 
         const imgOrigDiagonal = Math.sqrt(Math.pow(200,2)+Math.pow(400,2));
-        const tx = imgOrigDiagonal/2+100,
-              ty = imgOrigDiagonal/2+200;
+        const tx = imgOrigDiagonal/2,
+              ty = imgOrigDiagonal/2;
 
         var canvas = document.createElement("canvas");
         canvas.width = imgOrigDiagonal;
         canvas.height = imgOrigDiagonal;
 
         const ctxX = canvas.getContext('2d');
-        ctxX.fillStyle = 'red';
-        ctxX.fillRect(0,0,1000,1000);
+        //ctxX.fillStyle = 'red';
+        //ctxX.fillRect(0,0,1000,1000);
         ctxX.translate(tx,ty);
         ctxX.rotate(food.rotation+Math.PI/2);
-        ctxX.drawImage(imgOrig,0,0,200,400);
-        //ctxX.translate(-tx,-ty);
+        ctxX.drawImage(imgOrig,-100,-200,200,400);
+        ctxX.translate(-tx,-ty);
 
 
 
