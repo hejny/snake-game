@@ -6,6 +6,10 @@ import {renderWalls} from './render-walls'
 
 export function render(ctx:CanvasRenderingContext2D, game:IGame){
 
+
+    const durationGame = game.updated - game.started;
+
+
     ctx.fillStyle = 'black';
     ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
@@ -17,10 +21,10 @@ export function render(ctx:CanvasRenderingContext2D, game:IGame){
     );
 
 
-    renderWalls(ctx,2,game.walls,center);
-    renderWalls(ctx,1,game.walls,center);
-    renderFoods(ctx,game.foods,center);
-    renderSnake(ctx,game.snake,center,(new Date()).getTime()-game.started);
+    renderWalls(ctx,2,game.walls,durationGame,center);
+    renderWalls(ctx,1,game.walls,durationGame,center);
+    renderFoods(ctx,game.foods,durationGame,center);
+    renderSnake(ctx,game.snake,durationGame,center,(new Date()).getTime()-game.started);
 
 
 

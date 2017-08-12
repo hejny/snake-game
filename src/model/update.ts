@@ -2,6 +2,7 @@ import {IGame, wallCollide, wallMirror, IGamePhase, IWall} from './game'
 import {Vector2} from '../classes/vector2'
 import {Line2} from "../classes/line2";
 
+
 //todo should thare be gamee DI?
 export function update(game:IGame,cursorRotation:number):IGame{
 

@@ -3,21 +3,34 @@ import {Vector2} from '../classes/vector2'
 
 
 
-var imgOrig = document.createElement("img");
-//todo onload
-//todo process.env.PUBLIC_URL
-imgOrig.src = '/assets/images/objects/mouse/1.png';
+
+function pad(number:number,digits:number) {
+    return (new Array(digits).join('0')+number).slice(-digits);
+}
 
 
 
 
+
+const imgsOrigs = [];
+
+for(let i=1;i<=100;i++){
+
+    const imgOrig = document.createElement("img");
+    //todo onload
+    //todo process.env.PUBLIC_URL
+    imgOrig.src = `/assets/images/objects/mouse/mouse-${pad(i,4)}.png`;
+
+    imgsOrigs.push(imgOrig);
+
+}
 
 
 
 
 
 //todo correct english word foods?
-export function renderFoods(ctx:CanvasRenderingContext2D, foods:IFood[], center:Vector2){
+export function renderFoods(ctx:CanvasRenderingContext2D, foods:IFood[], durationGame:number, center:Vector2){
 
 
     for(let food of foods){
@@ -26,6 +39,13 @@ export function renderFoods(ctx:CanvasRenderingContext2D, foods:IFood[], center:
         //ctx.translate(center.x, center.y);
         //context.rotate(0.5);
         //ctx.rotate(0.0005);
+
+
+        const index = Math.floor(durationGame*food.speed)%100;
+        const imgOrig = imgsOrigs[index];
+
+        console.log(imgsOrigs,index,imgOrig);
+
 
 
         const imgOrigDiagonal = Math.sqrt(Math.pow(200,2)+Math.pow(400,2));

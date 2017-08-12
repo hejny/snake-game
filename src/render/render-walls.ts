@@ -2,7 +2,7 @@ import {IWall} from '../model/game'
 import {Vector2} from '../classes/vector2'
 
 
-export function renderWalls(ctx:CanvasRenderingContext2D, layer:number, walls:IWall[], center:Vector2){
+export function renderWalls(ctx:CanvasRenderingContext2D, layer:number, walls:IWall[], durationGame:number, center:Vector2){
     for(let wall of walls){
 
         if(layer===2) {

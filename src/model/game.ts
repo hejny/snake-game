@@ -75,7 +75,7 @@ export function createGame():IGame{
 
 
 
-    const foodsRatio = 0.01;
+    const foodsRatio = 0.002;
     let foods=[];
 
     for(let wall of walls){
@@ -86,7 +86,7 @@ export function createGame():IGame{
         while (volumeFoods < volume*foodsRatio) {
 
             const size = Math.random()*10+10;
-            const speed = (Math.random()-0.2)*0.1;
+            const speed = (Math.random()+0.5)*0.1;
 
             volumeFoods += Math.PI*size*size/4;
 
