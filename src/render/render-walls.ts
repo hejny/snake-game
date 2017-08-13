@@ -2,10 +2,23 @@ import {IWall} from '../model/game'
 import {Vector2} from '../classes/vector2'
 
 
-const imgOrig = document.createElement("img");
-//todo onload
-//todo process.env.PUBLIC_URL
-imgOrig.src = `/assets/images/objects/corner/1.png`;
+
+function pad(number:number,digits:number) {
+    return (new Array(digits).join('0')+number).slice(-digits);
+}
+const imgsOrigs = [];
+
+for(let i=1;i<=10;i++){
+
+    const imgOrig = document.createElement("img");
+    //todo onload
+    //todo process.env.PUBLIC_URL
+    imgOrig.src = `/assets/images/objects/corner/corner-${pad(i,4)}.png`;
+
+    imgsOrigs.push(imgOrig);
+
+}
+
 
 
 export function renderWalls(ctx:CanvasRenderingContext2D, layer:number, walls:IWall[], durationGame:number, center:Vector2){
@@ -27,7 +40,7 @@ export function renderWalls(ctx:CanvasRenderingContext2D, layer:number, walls:IW
 
 
 
-            ctx.drawImage(imgOrig,
+            ctx.drawImage(imgsOrigs[wall.corners.a],
                 wall.position.x - wall.size.x / 2 - center.x-50,
                 wall.position.y - wall.size.y / 2 - center.y-50,
                 100,100

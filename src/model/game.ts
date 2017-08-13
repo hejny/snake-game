@@ -20,6 +20,12 @@ export interface IFood{
 export interface IWall{
     position: Vector2;
     size: Vector2;
+    corners: {
+        a:number,
+        b:number,
+        c:number,
+        d:number
+    }
     //type: IWallType
 }
 
@@ -93,6 +99,15 @@ export function wallSnapOnlyLine(wall:IWall,point:Vector2,bounds:number=0):Vecto
 }
 
 
+function createRandomCorners(){
+    return {
+        a: Math.floor(Math.random()*1000)%10,
+        b: Math.floor(Math.random()*1000)%10,
+        c: Math.floor(Math.random()*1000)%10,
+        d: Math.floor(Math.random()*1000)%10
+    }
+}
+
 export function createGame():IGame{
 
 
@@ -101,17 +116,20 @@ export function createGame():IGame{
     walls.push({
         position: new Vector2(0,0),
         size: new Vector2(500,500),
+        corners: createRandomCorners()
     });
 
     walls.push({
         position: new Vector2(0,250),
         size: new Vector2(250,1000),
+        corners: createRandomCorners()
     });
 
 
     walls.push({
         position: new Vector2(0,0),
         size: new Vector2(10000,100),
+        corners: createRandomCorners()
     });
 
 
