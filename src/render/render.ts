@@ -10,7 +10,7 @@ export function render(ctx:CanvasRenderingContext2D, game:IGame){
     const durationGame = game.updated - game.started;
 
 
-    ctx.fillStyle = '#ff0000';
+    ctx.fillStyle = '#222222';
     ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
 
