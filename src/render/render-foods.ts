@@ -6,7 +6,7 @@ const images = new ImageCollection('/assets/images/objects/mouse/mouse-$.png',10
 
 export function renderFoods(ctx:CanvasRenderingContext2D, foods:IFood[], durationGame:number, center:Vector2){
     for(let food of foods){
-        const index = Math.floor(durationGame*food.speed)%100;
+        const index = Math.floor(durationGame*food.speed*0.8)%100;
         images.drawImage(ctx,index,new Vector2(food.position.x-center.x, food.position.y-center.y),100,food.rotation + Math.PI / 2);
 
     }
