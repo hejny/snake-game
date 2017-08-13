@@ -1,9 +1,10 @@
 import {IFood} from '../model/game'
 import {Vector2} from '../classes/vector2'
+import {ImageCollection} from '../classes/image-collection'
 
 
 
-
+/*
 function pad(number:number,digits:number) {
     return (new Array(digits).join('0')+number).slice(-digits);
 }
@@ -23,8 +24,8 @@ for(let i=1;i<=100;i++){
 
     imgsOrigs.push(imgOrig);
 
-}
-
+}*/
+const images = new ImageCollection('/assets/images/objects/mouse/mouse-$.png',100);
 
 
 
@@ -35,13 +36,16 @@ export function renderFoods(ctx:CanvasRenderingContext2D, foods:IFood[], duratio
 
     for(let food of foods){
 
+        const index = Math.floor(durationGame*food.speed)%100;
+        images.drawImage(ctx,index,new Vector2(food.position.x-center.x, food.position.y-center.y),100,food.rotation);
+
 
         //ctx.translate(center.x, center.y);
         //context.rotate(0.5);
         //ctx.rotate(0.0005);
 
 
-        const index = Math.floor(durationGame*food.speed)%100;
+        /*const index = Math.floor(durationGame*food.speed)%100;
         const imgOrig = imgsOrigs[index];
 
         //console.log(imgsOrigs,index,imgOrig);
@@ -71,7 +75,7 @@ export function renderFoods(ctx:CanvasRenderingContext2D, foods:IFood[], duratio
             food.position.x-center.x-50,
             food.position.y-center.y-50,
             100,100
-        );
+        );*/
 
 
 
