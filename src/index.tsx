@@ -3,6 +3,7 @@ import * as _ from "lodash";
 import {createGame,IGame,IGamePhase} from './model/game';
 import {update} from './model/update';
 import {render} from './render/render';
+import {Vector2} from "./classes/vector2";
 const gamee = (window as any).gamee;//todo import gamee from 'gamee';
 
 
@@ -18,13 +19,12 @@ const ctx = canvas.getContext("2d");
 let game:IGame=null;// = createGame();
 
 
-
-let cursorRotation = 0;
+let pointerX = 0,pointerY = 0;//todo Vector2
 canvas.addEventListener('pointermove',(event)=> {
-    const dx = canvas.width / 2 - event.clientX;
-    const dy = canvas.height / 2 - event.clientY;
-    cursorRotation = Math.atan2(dy, dx) + Math.PI;
+    pointerX = canvas.width / 2 - event.clientX;
+    pointerY = canvas.height / 2 - event.clientY;
 });
+
 
 
 
@@ -36,6 +36,14 @@ const updateState = _.debounce(function(game:IGame){
 
 function drawLoop() {
     if(game) {
+
+        //const durationGame = game.updated - game.started;
+        //const pointerDistance = Vector2.distance0(new Vector2(pointerX,pointerY));
+        //const px = Math.cos(durationGame/100)*pointerDistance/10;//todo screen
+        //const py = Math.sin(durationGame/100)*pointerDistance/10;
+        const cursorRotation = Math.atan2(pointerY, pointerX) + Math.PI;
+
+
         game = update(game,cursorRotation);
 
         if(!game){

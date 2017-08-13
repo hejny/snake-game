@@ -11,6 +11,7 @@ export interface IFood{
     rotation: number;
     size: number;
     speed: number;
+    away: boolean;
 }
 /*export enum IWallType {
     WALL,
@@ -66,6 +67,30 @@ export function wallSnap(wall:IWall,point:Vector2,bounds:number=0):Vector2{
     return new Vector2(x,y);
 }
 
+export function wallOnCorner(wall:IWall,point:Vector2,bounds:number=0):boolean{
+    let corners = 0;
+    if(wall.position.x+wall.size.x/2-bounds<point.x)corners++;
+    if(wall.position.y+wall.size.y/2-bounds<point.y)corners++;
+    if(wall.position.x-wall.size.x/2+bounds>point.x)corners++;
+    if(wall.position.y-wall.size.y/2+bounds>point.y)corners++;
+    return corners>=2;
+}
+
+export function wallCollideOnlyLine(wall:IWall,point:Vector2,bounds:number=0):boolean{
+    if(wallOnCorner(wall,point,bounds)){
+        return(true);
+    }else{
+        return(wallCollide(wall,point,bounds));
+    }
+}
+
+export function wallSnapOnlyLine(wall:IWall,point:Vector2,bounds:number=0):Vector2{
+    if(wallOnCorner(wall,point,bounds)){
+        return(point);
+    }else{
+        return(wallSnap(wall,point,bounds));
+    }
+}
 
 
 export function createGame():IGame{
@@ -82,6 +107,19 @@ export function createGame():IGame{
         position: new Vector2(0,250),
         size: new Vector2(250,1000),
     });
+
+
+    walls.push({
+        position: new Vector2(0,0),
+        size: new Vector2(10000,100),
+    });
+
+
+
+
+
+
+
 
 
 
@@ -104,7 +142,8 @@ export function createGame():IGame{
             foods.push({
                 position:Vector2.random(wall.size.x-bounds*2,wall.size.y-bounds*2,wall.position.x,wall.position.y),
                 rotation:0,
-                size,speed
+                size,speed,
+                away: false
             });
 
         }
@@ -160,7 +199,7 @@ export function createGame():IGame{
 
         snake: {
 
-            length: 100,
+            length: 300,
             headRotation: 0,
             segments:[
                 {x: 0, y: 0}

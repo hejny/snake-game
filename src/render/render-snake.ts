@@ -4,10 +4,10 @@ import {Vector2} from '../classes/vector2'
 
 export function renderSnake(ctx:CanvasRenderingContext2D, snake:ISnake, durationGame:number, center:Vector2, gameDuration:number){
 
-    ctx.fillStyle = this.color;
+    /*ctx.fillStyle = this.color;
     ctx.lineWidth = this.size;
     ctx.lineCap="round";
-    ctx.beginPath();
+    ctx.beginPath();*/
 
 
     //todo better - maybe via reducer
@@ -35,9 +35,9 @@ export function renderSnake(ctx:CanvasRenderingContext2D, snake:ISnake, duration
             snakeLength += Math.sqrt(Math.pow(lastSegment.y-thisSegment.y,2)+Math.pow(lastSegment.x-thisSegment.x,2));
             const snakeFromHead = snakeLengthSum-snakeLength;
 
-            /*const amplitude = Math.min(Math.sqrt(snakeLength/10),5),
-                periode = 30,
-                shift = Math.sqrt(Math.pow(snake.segments[0].x,2)+Math.pow(snake.segments[0].y,2))/10//gameDuration/500
+            /*const amplitude = 10,//Math.min(Math.sqrt(snakeLength/10),5),
+                periode = 10,
+                shift = gameDuration/200;//Vector2.distance0(snake.segments[0])*0.07;
             ;
 
             const rotation = Math.PI/2 + Math.atan2(lastSegment.y-thisSegment.y,lastSegment.x-thisSegment.x);
@@ -46,11 +46,11 @@ export function renderSnake(ctx:CanvasRenderingContext2D, snake:ISnake, duration
             const thisMoveBy = new Vector2(
                 Math.cos(rotation)*amplitude2,
                 Math.sin(rotation)*amplitude2
-            );**/
+            );*/
             const thisMoveBy = new Vector2(0,0);
 
             ctx.fillStyle = this.color;
-            ctx.lineWidth = Math.sqrt(snakeFromHead);//todo via real length
+            ctx.lineWidth = Math.sqrt(snakeFromHead)*1.1;//todo via real length
             ctx.lineCap="round";
             ctx.beginPath();
 

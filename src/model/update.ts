@@ -1,6 +1,23 @@
-import {IGame, wallCollide, wallSnap, IGamePhase, IWall} from './game'
+import {IGame, wallCollide, wallCollideOnlyLine, wallSnapOnlyLine, wallOnCorner, IGamePhase, IWall} from './game'
 import {Vector2} from '../classes/vector2'
 import {Line2} from "../classes/line2";
+
+
+function rotationStep(myRotation:number,targetRotation:number,step:number):number{
+
+    const diff1 = (myRotation-targetRotation+10*(Math.PI*2))%(Math.PI*2); //todo better
+    const diff2 = (targetRotation-myRotation+10*(Math.PI*2))%(Math.PI*2); //todo better
+
+    if(Math.abs(diff1)<=step)return targetRotation;
+
+    if(diff1>diff2){
+        return(myRotation+step);
+    }else{
+        return(myRotation-step);
+    }
+}
+
+
 
 
 //todo should thare be gamee DI?
@@ -21,18 +38,7 @@ export function update(game:IGame,cursorRotation:number):IGame{
 
 
         //=============================================Snake rotation
-        //todo better
-        const currentRotation = game.snake.headRotation;
-        const diff1 = (currentRotation-cursorRotation+10*(Math.PI*2))%(Math.PI*2)
-        const diff2 = (cursorRotation-currentRotation+10*(Math.PI*2))%(Math.PI*2)
-
-        //console.log(diff1,diff2);
-
-        if(diff1>diff2){
-            game.snake.headRotation += 0.006 * durationTick;
-        }else{
-            game.snake.headRotation -= 0.006 * durationTick;
-        }
+        game.snake.headRotation = rotationStep(game.snake.headRotation,cursorRotation,0.006 * durationTick);
         //=============================================
 
 
@@ -165,7 +171,7 @@ export function update(game:IGame,cursorRotation:number):IGame{
 
             let onWalls1: IWall[] = [];
             for (let wall of game.walls) {
-                if (wallCollide(wall, food.position,bounds)) {
+                if (wallCollideOnlyLine(wall, food.position,bounds)) {
                     onWalls1.push(wall);
                 }
             }
@@ -190,15 +196,26 @@ export function update(game:IGame,cursorRotation:number):IGame{
 
             if(onWalls2.length===0){
 
-                console.log(onWalls1,onWalls2);
+
+                food.away = true;
+
+                //console.log(onWalls1,onWalls2);
 
                 const wall = onWalls1[0];
 
                 //food.position = Vector2.random(wall.size.x,wall.size.y,wall.position.x,wall.position.y);
-                food.position = wallSnap(wall,food.position,bounds);
+                if(wallOnCorner(wall,food.position,-20)){
+
+                    food.position = Vector2.random(wall.size.x-bounds*2,wall.size.y-bounds*2,wall.position.x,wall.position.y);
+
+                }else{
+
+                    food.position = wallSnapOnlyLine(wall,food.position,bounds);
+                    const targetRotation = Math.atan2(food.position.y-previousFoodPosition.y,food.position.x-previousFoodPosition.x);
+                    food.rotation = rotationStep(food.rotation,targetRotation,0.006 * durationTick);
 
 
-                food.rotation = Math.atan2(food.position.y-previousFoodPosition.y,food.position.x-previousFoodPosition.x);
+                }
 
 
 
