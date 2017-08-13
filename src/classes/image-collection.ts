@@ -37,7 +37,7 @@ export class ImageCollection {
 
         const ctxRotated = canvasRotated.getContext('2d');
         ctxRotated.translate(imgOrigDiagonal / 2, imgOrigDiagonal / 2);
-        ctxRotated.rotate(rotation + Math.PI / 2);
+        ctxRotated.rotate(rotation);
         ctxRotated.drawImage(imgOrig, -imgOrig.naturalWidth/2, -imgOrig.naturalHeight/2, imgOrig.naturalWidth, imgOrig.naturalHeight);
         ctxRotated.translate(-imgOrigDiagonal / 2, -imgOrigDiagonal / 2);
 
