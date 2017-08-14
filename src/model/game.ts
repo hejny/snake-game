@@ -120,20 +120,32 @@ export function createGame():IGame{
     });
 
     walls.push({
-        position: new Vector2(0,250),
-        size: new Vector2(250,1000),
+        position: new Vector2(0,0),
+        size: new Vector2(100,1000),
         corners: createRandomCorners()
     });
 
 
     walls.push({
         position: new Vector2(0,0),
-        size: new Vector2(10000,100),
+        size: new Vector2(1000,100),
         corners: createRandomCorners()
     });
 
 
 
+
+    walls.push({
+        position: new Vector2(500,0),
+        size: new Vector2(50,1000),
+        corners: createRandomCorners()
+    });
+
+    walls.push({
+        position: new Vector2(0,500),
+        size: new Vector2(1000,50),
+        corners: createRandomCorners()
+    });
 
 
 

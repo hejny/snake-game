@@ -18,6 +18,9 @@ export function renderWalls(ctx:CanvasRenderingContext2D, layer:number, walls:IW
                 wall.size.y
             );
 
+
+
+
             images.drawImage(ctx,wall.corners.a,new Vector2(wall.position.x - wall.size.x / 2 - center.x,wall.position.y - wall.size.y / 2 - center.y),100,Math.PI*(0/2));
             images.drawImage(ctx,wall.corners.b,new Vector2(wall.position.x + wall.size.x / 2 - center.x,wall.position.y - wall.size.y / 2 - center.y),100,Math.PI*(1/2));
             images.drawImage(ctx,wall.corners.c,new Vector2(wall.position.x + wall.size.x / 2 - center.x,wall.position.y + wall.size.y / 2 - center.y),100,Math.PI*(2/2));
@@ -37,10 +40,10 @@ export function renderWalls(ctx:CanvasRenderingContext2D, layer:number, walls:IW
 
             ctx.fillStyle = '#ffffff';
             ctx.fillRect(
-                wall.position.x - (wall.size.x - 20) / 2 - bx - center.x ,
-                wall.position.y - (wall.size.y - 20) / 2 - by - center.y ,
-                wall.size.x - 20,
-                wall.size.y - 20
+                wall.position.x - (wall.size.x - 10) / 2 - bx - center.x ,
+                wall.position.y - (wall.size.y - 10) / 2 - by - center.y ,
+                wall.size.x - 10,
+                wall.size.y - 10
             );
 
         }
