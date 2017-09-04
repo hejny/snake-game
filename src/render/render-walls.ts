@@ -2,7 +2,7 @@ import {IWall} from '../model/game'
 import {Vector2} from '../classes/vector2'
 import {ImageCollection} from '../classes/image-collection'
 
-const images = new ImageCollection('/assets/images/objects/corner/corner-$.png',10);
+//const images = new ImageCollection('/assets/images/objects/corner/corner-$.png',10);
 
 export function renderWalls(ctx:CanvasRenderingContext2D, layer:number, walls:IWall[], durationGame:number, center:Vector2){
     for(let wall of walls){
@@ -21,10 +21,10 @@ export function renderWalls(ctx:CanvasRenderingContext2D, layer:number, walls:IW
 
 
 
-            images.drawImage(ctx,wall.corners.a,new Vector2(wall.position.x - wall.size.x / 2 - center.x,wall.position.y - wall.size.y / 2 - center.y),100,Math.PI*(0/2));
-            images.drawImage(ctx,wall.corners.b,new Vector2(wall.position.x + wall.size.x / 2 - center.x,wall.position.y - wall.size.y / 2 - center.y),100,Math.PI*(1/2));
-            images.drawImage(ctx,wall.corners.c,new Vector2(wall.position.x + wall.size.x / 2 - center.x,wall.position.y + wall.size.y / 2 - center.y),100,Math.PI*(2/2));
-            images.drawImage(ctx,wall.corners.d,new Vector2(wall.position.x - wall.size.x / 2 - center.x,wall.position.y + wall.size.y / 2 - center.y),100,Math.PI*(3/2));
+            //images.drawImage(ctx,wall.corners.a,new Vector2(wall.position.x - wall.size.x / 2 - center.x,wall.position.y - wall.size.y / 2 - center.y),100,Math.PI*(0/2));
+            //images.drawImage(ctx,wall.corners.b,new Vector2(wall.position.x + wall.size.x / 2 - center.x,wall.position.y - wall.size.y / 2 - center.y),100,Math.PI*(1/2));
+            //images.drawImage(ctx,wall.corners.c,new Vector2(wall.position.x + wall.size.x / 2 - center.x,wall.position.y + wall.size.y / 2 - center.y),100,Math.PI*(2/2));
+            //images.drawImage(ctx,wall.corners.d,new Vector2(wall.position.x - wall.size.x / 2 - center.x,wall.position.y + wall.size.y / 2 - center.y),100,Math.PI*(3/2));
 
 
         }else

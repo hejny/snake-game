@@ -1,6 +1,7 @@
-import {IGame, wallCollide, wallCollideOnlyLine, wallSnapOnlyLine, wallOnCorner, IGamePhase, IWall} from './game'
+import {IGame, wallCollide, wallSnap, IGamePhase, IWall} from './game'
 import {Vector2} from '../classes/vector2'
 import {Line2} from "../classes/line2";
+import {BOUNDS} from "../config";
 
 
 function rotationStep(myRotation:number,targetRotation:number,step:number):number{
@@ -163,62 +164,67 @@ export function update(game:IGame,cursorRotation:number):IGame{
 
 
         //=============================================Movement of foods
-        const bounds = 20;
-        const snakeHead = game.snake.segments[0];
+        //const snakeHead = game.snake.segments[0];
 
         for (let food of game.foods) {
 
 
+            //-----------------nearest snake point
+            const nearestSnakePoint =
+            game.snake.segments.map((currentSnakePoint)=>{
+                return ({
+                    distance: Vector2.distance(food.position, currentSnakePoint),
+                    vector: currentSnakePoint
+            });
+            }).sort((a,b)=>{
+                return a.distance>b.distance?1:-1;
+            })[0].vector;
+            //-----------------before move
+
+
+            //-----------------before move
+            //todo external func
             let onWalls1: IWall[] = [];
             for (let wall of game.walls) {
-                if (wallCollideOnlyLine(wall, food.position,bounds)) {
+                //console.log(wall, food.position,BOUNDS);
+                if (wallCollide(wall, food.position,BOUNDS)) {
                     onWalls1.push(wall);
                 }
             }
+            //-----------------
 
 
-            food.rotation = Math.atan2(food.position.y - snakeHead.y, food.position.x - snakeHead.x);
-            const previousFoodPosition = food.position;
+            //-----------------step
+            let newRotation = Math.atan2(food.position.y - nearestSnakePoint.y, food.position.x - nearestSnakePoint.x);
+            newRotation+=Math.PI*2/8;
+            food.rotation = rotationStep( food.rotation, newRotation , 0.006 * durationTick );
+            const lastFoodPosition = food.position;
 
             food.position = new Vector2(
                 food.position.x + Math.cos(food.rotation)*food.speed*durationTick,
                 food.position.y + Math.sin(food.rotation)*food.speed*durationTick
             );
+            //-----------------
 
 
+            //-----------------after move
             let onWalls2: IWall[] = [];
             for (let wall of game.walls) {
-                if (wallCollide(wall, food.position,bounds)) {
+                if (wallCollide(wall, food.position,BOUNDS)) {
                     onWalls2.push(wall);
                 }
             }
+            //-----------------
 
 
-            if(onWalls2.length===0){
+            if(onWalls2.length===0 && onWalls1.length>0){
+                //food.away = true;
+                const lastWall = onWalls1[0];
+                //console.log(lastWall,onWalls1,onWalls2);
 
-
-                food.away = true;
-
-                //console.log(onWalls1,onWalls2);
-
-                const wall = onWalls1[0];
-
-                //food.position = Vector2.random(wall.size.x,wall.size.y,wall.position.x,wall.position.y);
-                if(wallOnCorner(wall,food.position,-20)){
-
-                    food.position = Vector2.random(wall.size.x-bounds*2,wall.size.y-bounds*2,wall.position.x,wall.position.y);
-
-                }else{
-
-                    food.position = wallSnapOnlyLine(wall,food.position,bounds);
-                    const targetRotation = Math.atan2(food.position.y-previousFoodPosition.y,food.position.x-previousFoodPosition.x);
-                    food.rotation = rotationStep(food.rotation,targetRotation,0.006 * durationTick);
-
-
-                }
-
-
-
+                food.position = wallSnap(lastWall,food.position,BOUNDS);
+                //const targetRotation = Math.atan2(food.position.y-lastFoodPosition.y,food.position.x-lastFoodPosition.x);
+                //food.rotation = rotationStep(food.rotation,targetRotation,0.006 * durationTick);
             }
 
 

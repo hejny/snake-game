@@ -1,5 +1,5 @@
 import {Vector2} from '../classes/vector2'
-
+import {BOUNDS} from "../config";
 
 export interface ISnake{
     length: number,
@@ -152,8 +152,6 @@ export function createGame():IGame{
 
 
 
-
-    const bounds = 20;
     const foodsRatio = 0.002;
     let foods=[];
 
@@ -170,7 +168,7 @@ export function createGame():IGame{
             volumeFoods += Math.PI*size*size/4;
 
             foods.push({
-                position:Vector2.random(wall.size.x-bounds*2,wall.size.y-bounds*2,wall.position.x,wall.position.y),
+                position:Vector2.random(wall.size.x-BOUNDS*2,wall.size.y-BOUNDS*2,wall.position.x,wall.position.y),
                 rotation:0,
                 size,speed,
                 away: false
