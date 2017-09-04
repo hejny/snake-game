@@ -9,7 +9,7 @@ function rotationStep(myRotation:number,targetRotation:number,step:number):numbe
     const diff1 = (myRotation-targetRotation+10*(Math.PI*2))%(Math.PI*2); //todo better
     const diff2 = (targetRotation-myRotation+10*(Math.PI*2))%(Math.PI*2); //todo better
 
-    if(Math.abs(diff1)<=step)return targetRotation;
+    if(Math.abs(diff2)<=step)return targetRotation;
 
     if(diff1>diff2){
         return(myRotation+step);
