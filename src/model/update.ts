@@ -133,7 +133,7 @@ export function update(game:IGame,cursorRotation:number):IGame{
 
 
         //=============================================Collision on snake
-        let lastPoint:Vector2=null;
+        /*let lastPoint:Vector2=null;
         let firstLine:Line2=null;
         let otherLines:Line2[]=[];
 
@@ -158,7 +158,7 @@ export function update(game:IGame,cursorRotation:number):IGame{
         if(isOnSnake){
             console.log('Collision on snake');
             return null;
-        }
+        }*/
         //=============================================
 
 
@@ -196,8 +196,12 @@ export function update(game:IGame,cursorRotation:number):IGame{
 
 
             //-----------------step
+            const nearestSnakePointDistance = Vector2.distance(food.position, nearestSnakePoint);
+
             let newRotation = Math.atan2(food.position.y - nearestSnakePoint.y, food.position.x - nearestSnakePoint.x);
-            newRotation+=food.rotationError;
+            newRotation+=Math.PI/2;
+            //newRotation+=Math.PI/2*(1/nearestSnakePointDistance+1);
+            //newRotation+=food.rotationError;
             food.rotation = rotationStep( food.rotation, newRotation , 0.006 * durationTick );
             const lastFoodPosition = food.position;
 
