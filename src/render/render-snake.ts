@@ -5,7 +5,7 @@ import {Vector2} from '../classes/vector2'
 export function renderSnake(ctx:CanvasRenderingContext2D, snake:ISnake, durationGame:number, center:Vector2, gameDuration:number){
 
     /*ctx.fillStyle = this.color;
-    ctx.lineWidth = this.size;
+    ctx.lineWidth = this.radius;
     ctx.lineCap="round";
     ctx.beginPath();*/
 

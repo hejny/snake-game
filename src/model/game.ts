@@ -19,14 +19,7 @@ export interface IFood{
 }*/
 export interface IWall{
     position: Vector2;
-    size: Vector2;
-    corners: {
-        a:number,
-        b:number,
-        c:number,
-        d:number
-    }
-    //type: IWallType
+    radius: number
 }
 
 export enum IGamePhase {
@@ -47,38 +40,21 @@ export interface IGame{
 
 //todo separate files for snake, food, wall
 export function wallCollide(wall:IWall,point:Vector2,bounds:number=0):boolean{
-    return(
-        wall.position.x+wall.size.x/2-bounds>=point.x &&
-        wall.position.y+wall.size.y/2-bounds>=point.y &&
-        wall.position.x-wall.size.x/2+bounds<=point.x &&
-        wall.position.y-wall.size.y/2+bounds<=point.y
-    )
+    return Vector2.distance(wall.position,point)<=wall.radius-bounds;
 }
-
-/*export function wallMirror(wall:IWall,point:Vector2):Vector2{
-    if(!(wall.position.x+wall.size.x/2>=point.x))return new Vector2(point.x-wall.size.x,point.y);
-    if(!(wall.position.y+wall.size.y/2>=point.y))return new Vector2(point.x,point.y-wall.size.y);
-    if(!(wall.position.x-wall.size.x/2<=point.x))return new Vector2(point.x+wall.size.x,point.y);
-    if(!(wall.position.y-wall.size.y/2<=point.y))return new Vector2(point.x,point.y+wall.size.y);
-}*/
 
 
 export function wallSnap(wall:IWall,point:Vector2,bounds:number=0):Vector2{
-    let x = point.x;
-    let y = point.y;
-    if(wall.position.x+wall.size.x/2-bounds<point.x)x=wall.position.x+wall.size.x/2-bounds;
-    if(wall.position.y+wall.size.y/2-bounds<point.y)y=wall.position.y+wall.size.y/2-bounds;
-    if(wall.position.x-wall.size.x/2+bounds>point.x)x=wall.position.x-wall.size.x/2+bounds;
-    if(wall.position.y-wall.size.y/2+bounds>point.y)y=wall.position.y-wall.size.y/2+bounds;
-    return new Vector2(x,y);
+    return point;//todo
 }
 
+/*
 export function wallOnCorner(wall:IWall,point:Vector2,bounds:number=0):boolean{
     let corners = 0;
-    if(wall.position.x+wall.size.x/2-bounds<point.x)corners++;
-    if(wall.position.y+wall.size.y/2-bounds<point.y)corners++;
-    if(wall.position.x-wall.size.x/2+bounds>point.x)corners++;
-    if(wall.position.y-wall.size.y/2+bounds>point.y)corners++;
+    if(wall.position.x+wall.radius.x/2-bounds<point.x)corners++;
+    if(wall.position.y+wall.radius.y/2-bounds<point.y)corners++;
+    if(wall.position.x-wall.radius.x/2+bounds>point.x)corners++;
+    if(wall.position.y-wall.radius.y/2+bounds>point.y)corners++;
     return corners>=2;
 }
 
@@ -106,7 +82,7 @@ function createRandomCorners(){
         c: Math.floor(Math.random()*1000)%10,
         d: Math.floor(Math.random()*1000)%10
     }
-}
+}*/
 
 export function createGame():IGame{
 
@@ -115,36 +91,12 @@ export function createGame():IGame{
 
     walls.push({
         position: new Vector2(0,0),
-        size: new Vector2(500,500),
-        corners: createRandomCorners()
+        radius: 250
     });
 
     walls.push({
-        position: new Vector2(0,0),
-        size: new Vector2(100,1000),
-        corners: createRandomCorners()
-    });
-
-
-    walls.push({
-        position: new Vector2(0,0),
-        size: new Vector2(1000,100),
-        corners: createRandomCorners()
-    });
-
-
-
-
-    walls.push({
-        position: new Vector2(500,0),
-        size: new Vector2(50,1000),
-        corners: createRandomCorners()
-    });
-
-    walls.push({
-        position: new Vector2(0,500),
-        size: new Vector2(1000,50),
-        corners: createRandomCorners()
+        position: new Vector2(100,300),
+        radius: 100
     });
 
 
@@ -157,7 +109,7 @@ export function createGame():IGame{
 
     for(let wall of walls){
 
-        const volume = wall.size.x * wall.size.y;
+        const volume = wall.radius.x * wall.radius.y;
         let volumeFoods = 0;
 
         while (volumeFoods < volume*foodsRatio) {
@@ -168,7 +120,7 @@ export function createGame():IGame{
             volumeFoods += Math.PI*size*size/4;
 
             foods.push({
-                position:Vector2.random(wall.size.x-BOUNDS*2,wall.size.y-BOUNDS*2,wall.position.x,wall.position.y),
+                position:Vector2.random(wall.radius.x-BOUNDS*2,wall.radius.y-BOUNDS*2,wall.position.x,wall.position.y),
                 rotation:0,
                 size,speed,
                 away: false
@@ -181,7 +133,7 @@ export function createGame():IGame{
     /*for (var i = 0; i < 100; i++) {
         foods.push({
             position:Vector2.random(500,500),
-            size: Math.random()*10+10,
+            radius: Math.random()*10+10,
         });
     }*/
 
@@ -191,25 +143,25 @@ export function createGame():IGame{
 
     /*walls.push({
         position: new Vector2(250,0),
-        size: new Vector2(10,500),
+        radius: new Vector2(10,500),
     });
     walls.push({
         position: new Vector2(-250,0),
-        size: new Vector2(10,500),
+        radius: new Vector2(10,500),
     });
     walls.push({
         position: new Vector2(0,250),
-        size: new Vector2(500,10),
+        radius: new Vector2(500,10),
     });
     walls.push({
         position: new Vector2(0,-250),
-        size: new Vector2(500,10),
+        radius: new Vector2(500,10),
     });*/
 
     /*for (var i = 0; i < 100; i++) {
         walls.push({
             position:Vector2.random(500,500),
-            size: Vector2.random(50,50),
+            radius: Vector2.random(50,50),
         });
     }*/
 
