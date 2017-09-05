@@ -32,5 +32,16 @@ export class Vector2 {
         ))
     }
 
+    static randomCircle(center:Vector2,maxRadius:number){
+
+        const rotation = Math.random()*Math.PI*2;
+        const radius = Math.random()*maxRadius;
+
+        return(new Vector2(
+            center.x + Math.cos(rotation)*radius,
+            center.y + Math.sin(rotation)*radius
+        ))
+    }
+
 
 }

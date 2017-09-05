@@ -1,4 +1,4 @@
-import {IGame, wallCollide, wallSnap, IGamePhase, IWall} from './game'
+import {IGame, wallCollide, IGamePhase, IWall} from './game'
 import {Vector2} from '../classes/vector2'
 import {Line2} from "../classes/line2";
 import {BOUNDS} from "../config";
@@ -165,6 +165,7 @@ export function update(game:IGame,cursorRotation:number):IGame{
 
         //=============================================Movement of foods
         //const snakeHead = game.snake.segments[0];
+        newFoods = [];
 
         for (let food of game.foods) {
 
@@ -182,7 +183,7 @@ export function update(game:IGame,cursorRotation:number):IGame{
             //-----------------before move
 
 
-            //-----------------before move
+            /*//-----------------before move
             //todo external func
             let onWalls1: IWall[] = [];
             for (let wall of game.walls) {
@@ -191,12 +192,12 @@ export function update(game:IGame,cursorRotation:number):IGame{
                     onWalls1.push(wall);
                 }
             }
-            //-----------------
+            //-----------------*/
 
 
             //-----------------step
             let newRotation = Math.atan2(food.position.y - nearestSnakePoint.y, food.position.x - nearestSnakePoint.x);
-            newRotation+=Math.PI*2/8;
+            newRotation+=food.rotationError;
             food.rotation = rotationStep( food.rotation, newRotation , 0.006 * durationTick );
             const lastFoodPosition = food.position;
 
@@ -210,25 +211,31 @@ export function update(game:IGame,cursorRotation:number):IGame{
             //-----------------after move
             let onWalls2: IWall[] = [];
             for (let wall of game.walls) {
-                if (wallCollide(wall, food.position,BOUNDS)) {
+                if (wallCollide(wall, food.position,-BOUNDS)) {
                     onWalls2.push(wall);
                 }
             }
             //-----------------
 
 
-            if(onWalls2.length===0 && onWalls1.length>0){
-                //food.away = true;
-                const lastWall = onWalls1[0];
+            if(onWalls2.length===0/* && onWalls1.length>0*/){
+
+
+                //const lastWall = onWalls1[0];
                 //console.log(lastWall,onWalls1,onWalls2);
 
-                food.position = wallSnap(lastWall,food.position,BOUNDS);
+
+                //food.position = wallSnap(lastWall,food.position,BOUNDS);
                 //const targetRotation = Math.atan2(food.position.y-lastFoodPosition.y,food.position.x-lastFoodPosition.x);
                 //food.rotation = rotationStep(food.rotation,targetRotation,0.006 * durationTick);
+            }else{
+                newFoods.push(food);
             }
 
 
         }
+
+        game.foods = newFoods;
         //=============================================
 
 

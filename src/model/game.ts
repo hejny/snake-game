@@ -11,7 +11,8 @@ export interface IFood{
     rotation: number;
     size: number;
     speed: number;
-    away: boolean;
+    rotationError: number;
+
 }
 /*export enum IWallType {
     WALL,
@@ -43,10 +44,20 @@ export function wallCollide(wall:IWall,point:Vector2,bounds:number=0):boolean{
     return Vector2.distance(wall.position,point)<=wall.radius-bounds;
 }
 
-
+/*
 export function wallSnap(wall:IWall,point:Vector2,bounds:number=0):Vector2{
-    return point;//todo
-}
+
+    return new Vector2(0,0);
+
+    const rotation = Math.atan2(point.y-wall.position.y,point.x-wall.position.x);
+
+    return new Vector2(
+        wall.position.x+Math.cos(rotation)*(wall.radius-bounds),
+        wall.position.y+Math.sin(rotation)*(wall.radius-bounds)
+    )
+
+}*/
+
 
 /*
 export function wallOnCorner(wall:IWall,point:Vector2,bounds:number=0):boolean{
@@ -109,7 +120,7 @@ export function createGame():IGame{
 
     for(let wall of walls){
 
-        const volume = wall.radius.x * wall.radius.y;
+        const volume = Math.pow(wall.radius,2)*Math.PI*2;
         let volumeFoods = 0;
 
         while (volumeFoods < volume*foodsRatio) {
@@ -117,13 +128,15 @@ export function createGame():IGame{
             const size = Math.random()*10+10;
             const speed = (Math.random()+0.5)*0.1;
 
+
+
             volumeFoods += Math.PI*size*size/4;
 
             foods.push({
-                position:Vector2.random(wall.radius.x-BOUNDS*2,wall.radius.y-BOUNDS*2,wall.position.x,wall.position.y),
+                position:Vector2.randomCircle(wall.position,wall.radius),
                 rotation:0,
                 size,speed,
-                away: false
+                rotationError: (Math.random()-0.5)*Math.PI*2*(3/4)
             });
 
         }
