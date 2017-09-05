@@ -1,6 +1,6 @@
-import {IGame, wallCollide, IGamePhase, IWall} from './game'
+import {IGame, wallCollide, IGamePhase, IWall, spawnRandomFoods} from './game'
 import {Vector2} from '../classes/vector2'
-import {Line2} from "../classes/line2";
+//import {Line2} from "../classes/line2";
 import {BOUNDS} from "../config";
 
 
@@ -126,7 +126,7 @@ export function update(game:IGame,cursorRotation:number):IGame{
         }
         if(!isOnWall){
             console.log('Collision on walls');
-            return null;
+            return null;//todo it should return game with end state
         }
         //=============================================
 
@@ -239,14 +239,68 @@ export function update(game:IGame,cursorRotation:number):IGame{
 
         }
 
-        game.foods = newFoods;
+        game.foods = newFoods;//todo when spawning walls newFoods are mutating!
         //=============================================
+
+
+
+
+
+
+
+        //=============================================Remove/spawn walls
+        const newWalls = [];
+
+        //-------------------------Remove
+        for (let wall of game.walls) {//todo via some
+
+
+            //todo separate function
+            const snakeOnWall = (()=>{
+                for(let segment of game.snake.segments){
+                    if(!wallCollide(wall,segment,-BOUNDS))
+                        return false;
+                }
+                return true;
+            })();
+
+
+            if(snakeOnWall){
+               newWalls.push(wall);
+            }
+
+            //Vector2.distance(wall.position,game.snake.segments[0]);
+
+
+            wall.radius
+        }
+        //-------------------------
+
+        //-------------------------Spawn
+        for (let wall of game.walls) {//todo via some
+
+            if(wallCollide(wall,game.snake.segments[0],BOUNDS)){
+
+                const newWall = {
+                    position:game.snake.segments[0],
+                    radius: Math.random()*100+100
+                };
+                newWalls.push(newWall);
+                spawnRandomFoods(newWall,0.002,game.foods);
+
+            }
+        }
+        //-------------------------
+
+        game.walls = newWalls;
+        //=============================================
+
 
 
 
     }
 
-    return game;
+    return game;//todo create new object
 
 
 }

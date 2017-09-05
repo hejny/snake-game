@@ -44,6 +44,34 @@ export function wallCollide(wall:IWall,point:Vector2,bounds:number=0):boolean{
     return Vector2.distance(wall.position,point)<=wall.radius-bounds;
 }
 
+//todo ?should it be pure function???
+export function spawnRandomFoods(wall:IWall,density:number,foods:IFood[]):void{
+
+    if(density>1 || density<0){
+        throw new Error('Density should be between 0 and 1.');
+    }
+
+    const volume = Math.pow(wall.radius,2)*Math.PI*2;
+    let volumeFoods = 0;
+
+    while (volumeFoods < volume*density) {
+
+        const size = Math.random()*10+10;
+        const speed = (Math.random()+0.5)*0.1;
+
+        volumeFoods += Math.PI*size*size/4;
+
+        foods.push({
+            position:Vector2.randomCircle(wall.position,wall.radius),
+            rotation:0,
+            size,speed,
+            rotationError: (Math.random()-0.5)*Math.PI*2*(3/4)
+        });
+
+    }
+}
+
+
 /*
 export function wallSnap(wall:IWall,point:Vector2,bounds:number=0):Vector2{
 
@@ -97,7 +125,6 @@ function createRandomCorners(){
 
 export function createGame():IGame{
 
-
     let walls=[];
 
     walls.push({
@@ -111,72 +138,10 @@ export function createGame():IGame{
     });
 
 
-
-
-
-
-    const foodsRatio = 0.002;
     let foods=[];
-
     for(let wall of walls){
-
-        const volume = Math.pow(wall.radius,2)*Math.PI*2;
-        let volumeFoods = 0;
-
-        while (volumeFoods < volume*foodsRatio) {
-
-            const size = Math.random()*10+10;
-            const speed = (Math.random()+0.5)*0.1;
-
-
-
-            volumeFoods += Math.PI*size*size/4;
-
-            foods.push({
-                position:Vector2.randomCircle(wall.position,wall.radius),
-                rotation:0,
-                size,speed,
-                rotationError: (Math.random()-0.5)*Math.PI*2*(3/4)
-            });
-
-        }
+        spawnRandomFoods(wall,0.002,foods);//todo food density as const in config
     }
-
-
-    /*for (var i = 0; i < 100; i++) {
-        foods.push({
-            position:Vector2.random(500,500),
-            radius: Math.random()*10+10,
-        });
-    }*/
-
-
-
-
-
-    /*walls.push({
-        position: new Vector2(250,0),
-        radius: new Vector2(10,500),
-    });
-    walls.push({
-        position: new Vector2(-250,0),
-        radius: new Vector2(10,500),
-    });
-    walls.push({
-        position: new Vector2(0,250),
-        radius: new Vector2(500,10),
-    });
-    walls.push({
-        position: new Vector2(0,-250),
-        radius: new Vector2(500,10),
-    });*/
-
-    /*for (var i = 0; i < 100; i++) {
-        walls.push({
-            position:Vector2.random(500,500),
-            radius: Vector2.random(50,50),
-        });
-    }*/
 
 
 
