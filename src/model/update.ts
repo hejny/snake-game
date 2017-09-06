@@ -48,7 +48,7 @@ export function update(game:IGame,cursorRotation:number):IGame{
 
 
         //=============================================Snake movement
-        const speed = 100;
+        const speed = Math.sqrt(game.score)*70;//todo better equation of snake speed
         const oldHead = game.snake.segments[0];
 
 
