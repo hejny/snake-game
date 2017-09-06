@@ -1,7 +1,7 @@
 import {IGame, wallCollide, IGamePhase, IWall, spawnRandomFoods} from './game'
 import {Vector2} from '../classes/vector2'
 //import {Line2} from "../classes/line2";
-import {BOUNDS} from "../config";
+import {BOUNDS, WALL_GROWTH_SPEED} from "../config";
 
 
 function rotationStep(myRotation:number,targetRotation:number,step:number):number{
@@ -248,73 +248,51 @@ export function update(game:IGame,cursorRotation:number):IGame{
 
 
 
-        //=============================================Remove/spawn walls
+        //=============================================Growth/Remove/spawn walls
         const newWalls = [];
-
-
-        //-------------------------Growth
-        const WALL_GROWTH_SPEED = 0.01;//todo to config
 
         for (let wall of game.walls) {
 
 
-            if(wall.radius<wall.radiusDest){
-                wall.radius-=durationTick*WALL_GROWTH_SPEED;
-            }else
-            if(wall.radius>wall.radiusDest){
-                wall.radius-=durationTick*WALL_GROWTH_SPEED;
+            if (wall.radius < wall.radiusDest) {
+                wall.radius -= durationTick * WALL_GROWTH_SPEED;
+            } else if (wall.radius > wall.radiusDest) {
+                wall.radius -= durationTick * WALL_GROWTH_SPEED;
             }
-            if(Math.abs(wall.radius-wall.radiusDest)<WALL_GROWTH_SPEED){
-                wall.radius=wall.radiusDest;
-            }
-
-            if(wall.radius!==0){
-                newWalls.push(wall);
+            if (Math.abs(wall.radius - wall.radiusDest) < WALL_GROWTH_SPEED) {
+                wall.radius = wall.radiusDest;
             }
 
-        }
-        //-------------------------
+
+            if (wall.radius !== 0) {
+
+                //todo separate function
+                const anySegmentOfSnakeOnThisWall = (() => {
+                    for (let segment of game.snake.segments) {
+                        if (!wallCollide(wall, segment, -BOUNDS))
+                            return false;
+                    }
+                    return true;
+                })();
 
 
-        //-------------------------Remove
-        for (let wall of newWalls) {
+                if (!anySegmentOfSnakeOnThisWall) {
+                    wall.radiusDest = 0;
+                } else {
 
+                    if (wallCollide(wall, game.snake.segments[0], BOUNDS)) {
 
-            //todo separate function
-            const snakeOnWall = (()=>{
-                for(let segment of game.snake.segments){
-                    if(!wallCollide(wall,segment,-BOUNDS))
-                        return false;
+                        const newWall = {
+                            position: game.snake.segments[0],
+                            radius: 0,
+                            radiusDest: Math.random() * 100 + 100
+                        };
+                        newWalls.push(newWall);
+                        //food removing is evaluated by other part of game update function
+                        spawnRandomFoods(newWall, 0.002, game.foods);
+
+                    }
                 }
-                return true;
-            })();
-
-
-            if(!snakeOnWall){
-                wall.radiusDest=0;
-                //
-            }
-
-            //Vector2.distance(wall.position,game.snake.segments[0]);
-
-
-            //wall.radius
-        }
-        //-------------------------
-
-        //-------------------------Spawn
-        for (let wall of game.walls) {//todo via some
-
-            if(wallCollide(wall,game.snake.segments[0],BOUNDS)){
-
-                const newWall = {
-                    position:game.snake.segments[0],
-                    radius: 0,
-                    radiusDest: Math.random()*100+100
-                };
-                newWalls.push(newWall);
-                spawnRandomFoods(newWall,0.002,game.foods);
-
             }
         }
         //-------------------------
