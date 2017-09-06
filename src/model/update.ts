@@ -22,11 +22,11 @@ function rotationStep(myRotation:number,targetRotation:number,step:number):numbe
 
 
 //todo should thare be gamee DI?
-export function update(game:IGame,cursorRotation:number):IGame{
+export function update(game:IGame,cursorRotation:number, currentTime:number):IGame{
 
 
     const lastUpdated = game.updated || game.started;
-    game.updated = (new Date()).getTime();//todo pure
+    game.updated = currentTime;
 
     const durationGame = game.updated - game.started;
     const durationTick = Math.min(game.updated - lastUpdated,100);

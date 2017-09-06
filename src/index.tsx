@@ -44,7 +44,7 @@ function drawLoop() {
         const cursorRotation = Math.atan2(pointerY, pointerX) + Math.PI;
 
 
-        game = update(game,cursorRotation);
+        game = update(game,cursorRotation,(new Date()).getTime());
 
         if(!game){
             gamee.gameOver();
