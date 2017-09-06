@@ -20,7 +20,8 @@ export interface IFood{
 }*/
 export interface IWall{
     position: Vector2;
-    radius: number
+    radius: number,
+    radiusDest: number
 }
 
 export enum IGamePhase {
@@ -129,12 +130,14 @@ export function createGame():IGame{
 
     walls.push({
         position: new Vector2(0,0),
-        radius: 250
+        radius: 250,
+        radiusDest: 250,
     });
 
     walls.push({
         position: new Vector2(100,300),
-        radius: 100
+        radius: 100,
+        radiusDest: 150
     });
 
 

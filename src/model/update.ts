@@ -251,8 +251,33 @@ export function update(game:IGame,cursorRotation:number):IGame{
         //=============================================Remove/spawn walls
         const newWalls = [];
 
+
+        //-------------------------Growth
+        const WALL_GROWTH_SPEED = 0.01;//todo to config
+
+        for (let wall of game.walls) {
+
+
+            if(wall.radius<wall.radiusDest){
+                wall.radius-=durationTick*WALL_GROWTH_SPEED;
+            }else
+            if(wall.radius>wall.radiusDest){
+                wall.radius-=durationTick*WALL_GROWTH_SPEED;
+            }
+            if(Math.abs(wall.radius-wall.radiusDest)<WALL_GROWTH_SPEED){
+                wall.radius=wall.radiusDest;
+            }
+
+            if(wall.radius!==0){
+                newWalls.push(wall);
+            }
+
+        }
+        //-------------------------
+
+
         //-------------------------Remove
-        for (let wall of game.walls) {//todo via some
+        for (let wall of newWalls) {
 
 
             //todo separate function
@@ -265,14 +290,15 @@ export function update(game:IGame,cursorRotation:number):IGame{
             })();
 
 
-            if(snakeOnWall){
-               newWalls.push(wall);
+            if(!snakeOnWall){
+                wall.radiusDest=0;
+                //
             }
 
             //Vector2.distance(wall.position,game.snake.segments[0]);
 
 
-            wall.radius
+            //wall.radius
         }
         //-------------------------
 
@@ -283,7 +309,8 @@ export function update(game:IGame,cursorRotation:number):IGame{
 
                 const newWall = {
                     position:game.snake.segments[0],
-                    radius: Math.random()*100+100
+                    radius: 0,
+                    radiusDest: Math.random()*100+100
                 };
                 newWalls.push(newWall);
                 spawnRandomFoods(newWall,0.002,game.foods);
@@ -292,8 +319,12 @@ export function update(game:IGame,cursorRotation:number):IGame{
         }
         //-------------------------
 
+
         game.walls = newWalls;
         //=============================================
+
+
+
 
 
 
