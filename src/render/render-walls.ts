@@ -21,7 +21,7 @@ export function renderWalls(ctx:CanvasRenderingContext2D, layer:number, walls:IW
             ctx.fill();
 
 
-        }else
+        }/*else
         if(layer===1) {
 
 
@@ -37,6 +37,6 @@ export function renderWalls(ctx:CanvasRenderingContext2D, layer:number, walls:IW
             ctx.fill();
 
 
-        }
+        }*/
     }
 }

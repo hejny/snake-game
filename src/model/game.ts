@@ -52,8 +52,10 @@ export function spawnRandomFoods(wall:IWall,density:number,foods:IFood[]):void{
         throw new Error('Density should be between 0 and 1.');
     }
 
-    const volume = Math.pow(wall.radius,2)*Math.PI*2;
+    const volume = Math.pow(wall.radiusDest,2)*Math.PI*2;
     let volumeFoods = 0;
+
+    //console.log(volumeFoods , volume*density);
 
     while (volumeFoods < volume*density) {
 
@@ -62,8 +64,9 @@ export function spawnRandomFoods(wall:IWall,density:number,foods:IFood[]):void{
 
         volumeFoods += Math.PI*size*size/4;
 
+        //console.log('Spawning food.');
         foods.push({
-            position:Vector2.randomCircle(wall.position,wall.radius),
+            position:Vector2.randomCircle(wall.position,wall.radiusDest),
             rotation:0,
             size,speed,
             rotationError: (Math.random()-0.5)*Math.PI*2*(3/4)

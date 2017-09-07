@@ -21,6 +21,12 @@ function rotationStep(myRotation:number,targetRotation:number,step:number):numbe
 
 
 
+
+
+
+
+
+
 //todo should thare be gamee DI?
 export function update(game:IGame,cursorRotation:number, currentTime:number):IGame{
 
@@ -48,7 +54,7 @@ export function update(game:IGame,cursorRotation:number, currentTime:number):IGa
 
 
         //=============================================Snake movement
-        const speed = Math.sqrt(game.score)*70;//todo better equation of snake speed
+        const speed = Math.sqrt(game.score+1)*70;//todo better equation of snake speed
         const oldHead = game.snake.segments[0];
 
 
@@ -249,50 +255,88 @@ export function update(game:IGame,cursorRotation:number, currentTime:number):IGa
 
 
         //=============================================Growth/Remove/spawn walls
+        const WALLS_LIMIT = 15;
+
+
         const newWalls = [];
 
         for (let wall of game.walls) {
 
 
             if (wall.radius < wall.radiusDest) {
-                wall.radius -= durationTick * WALL_GROWTH_SPEED;
+                wall.radius += durationTick * WALL_GROWTH_SPEED;
             } else if (wall.radius > wall.radiusDest) {
                 wall.radius -= durationTick * WALL_GROWTH_SPEED;
             }
-            if (Math.abs(wall.radius - wall.radiusDest) < WALL_GROWTH_SPEED) {
+            if (Math.abs(wall.radius - wall.radiusDest) < durationTick * WALL_GROWTH_SPEED) {
                 wall.radius = wall.radiusDest;
             }
 
 
-            if (wall.radius !== 0) {
+            //console.log(durationTick * WALL_GROWTH_SPEED);
+
+            if (wall.radius > 0) {
 
                 //todo separate function
                 const anySegmentOfSnakeOnThisWall = (() => {
                     for (let segment of game.snake.segments) {
-                        if (!wallCollide(wall, segment, -BOUNDS))
-                            return false;
+                        if (wallCollide(wall, segment, -BOUNDS))
+                            return true;
                     }
-                    return true;
+                    return false;
                 })();
+
+                //console.log(anySegmentOfSnakeOnThisWall);
 
 
                 if (!anySegmentOfSnakeOnThisWall) {
-                    wall.radiusDest = 0;
+
+                    wall.radiusDest = 0;//todo immutable
+
                 } else {
 
-                    if (wallCollide(wall, game.snake.segments[0], BOUNDS)) {
+                    if (!wallCollide(wall, game.snake.segments[0], BOUNDS)) {
 
-                        const newWall = {
-                            position: game.snake.segments[0],
-                            radius: 0,
-                            radiusDest: Math.random() * 100 + 100
-                        };
-                        newWalls.push(newWall);
-                        //food removing is evaluated by other part of game update function
-                        spawnRandomFoods(newWall, 0.002, game.foods);
+                        if(game.walls.length<=WALLS_LIMIT) {
 
+
+                            const newWall = {
+                                position: game.snake.segments[0],
+                                radius: 0,
+                                radiusDest: Math.random() * 100 + 100
+                            };
+
+
+                            const newWallOnlyTouching = ((newWall:IWall,walls,BOUNDS) => {
+                                for(let wall of walls) {
+                                    const distance = Vector2.distance(wall.position,newWall.position);
+                                    const radiuses = (wall.radiusDest+newWall.radiusDest-BOUNDS)/2;//todo maybe BOUNDS*2?
+                                    if(distance<radiuses){
+                                        return false;
+                                    }
+                                }
+                                return true;
+                            })(newWall,game.walls,BOUNDS);
+
+
+                            if(newWallOnlyTouching) {
+
+                                console.log('Creating a new wall.');
+
+                                newWalls.push(newWall);
+                                //food removing is evaluated by other part of game update function
+                                spawnRandomFoods(newWall, 0.002, game.foods);
+
+                            }else{
+                                //console.log('Not creating a new wall.');
+                            }
+                        }
                     }
                 }
+
+                newWalls.push(wall);
+            }else{
+                console.log(wall.radius);
             }
         }
         //-------------------------
