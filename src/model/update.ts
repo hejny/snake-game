@@ -54,7 +54,8 @@ export function update(game:IGame,cursorRotation:number, currentTime:number):IGa
 
 
         //=============================================Snake movement
-        const speed = Math.sqrt(game.score+1)*70;//todo better equation of snake speed
+        const speed = game.score+100;
+        //const speed = Math.sqrt(10000*Math.pow(2,game.score/10));
         const oldHead = game.snake.segments[0];
 
 
@@ -303,7 +304,7 @@ export function update(game:IGame,cursorRotation:number, currentTime:number):IGa
                             const newWall = {
                                 position: game.snake.segments[0],
                                 radius: 0,
-                                radiusDest: Math.random() * 100 + 100
+                                radiusDest: Math.random() * 150 + 100
                             };
 
 

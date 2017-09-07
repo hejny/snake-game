@@ -42,7 +42,7 @@ export interface IGame{
 
 //todo separate files for snake, food, wall
 export function wallCollide(wall:IWall,point:Vector2,bounds:number=0):boolean{
-    return Vector2.distance(wall.position,point)<=wall.radius-bounds;
+    return Vector2.distance(wall.position,point)<=wall.radiusDest-bounds;
 }
 
 //todo ?should it be pure function???
