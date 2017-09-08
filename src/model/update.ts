@@ -44,6 +44,11 @@ export function update(game:IGame,cursorRotation:number, currentTime:number):IGa
 
 
 
+        const newWalls = [];
+
+
+
+
         //=============================================Snake rotation
         game.snake.headRotation = rotationStep(game.snake.headRotation,cursorRotation,0.006 * durationTick);
         //=============================================
@@ -100,6 +105,7 @@ export function update(game:IGame,cursorRotation:number, currentTime:number):IGa
 
 
 
+        const FOODS_LIMIT = 5;
 
 
         //=============================================Collision on food
@@ -109,6 +115,18 @@ export function update(game:IGame,cursorRotation:number, currentTime:number):IGa
 
                 game.score++;//todo pure
                 game.snake.length+=10;//todo pure
+
+
+
+                /*const newWall = {
+                    position: food.position,
+                    radius: 0,
+                    radiusDest: Math.random() * 50 + 100
+                };
+                newWalls.push(newWall);
+                spawnRandomFoods(newWall, 0.0002, game.foods);*/
+
+
 
             } else {
                 newFoods.push(food);
@@ -127,7 +145,7 @@ export function update(game:IGame,cursorRotation:number, currentTime:number):IGa
 
         let isOnWall = false;
         for (let wall of game.walls) {//todo via some
-            if (wallCollide(wall,newHead)) {
+            if (wallCollide(wall,newHead/*,Math.sqrt(game.snake.segments.length)*1.1*/)) {
                 isOnWall = true;
             }
         }
@@ -259,7 +277,7 @@ export function update(game:IGame,cursorRotation:number, currentTime:number):IGa
         const WALLS_LIMIT = 15;
 
 
-        const newWalls = [];
+
 
         for (let wall of game.walls) {
 
@@ -296,15 +314,16 @@ export function update(game:IGame,cursorRotation:number, currentTime:number):IGa
 
                 } else {
 
-                    if (!wallCollide(wall, game.snake.segments[0], BOUNDS)) {
+                    //if (!wallCollide(wall, game.snake.segments[0], BOUNDS)) {
 
-                        if(game.walls.length<=WALLS_LIMIT) {
+                        if(game.walls.length<=WALLS_LIMIT && newFoods.length<=FOODS_LIMIT) {
 
 
                             const newWall = {
-                                position: game.snake.segments[0],
+                                position: Vector2.randomCircle(wall.position,wall.radiusDest),
+                                //position: game.snake.segments[0],
                                 radius: 0,
-                                radiusDest: Math.random() * 150 + 100
+                                radiusDest: Math.random() * 50 + 100
                             };
 
 
@@ -326,13 +345,13 @@ export function update(game:IGame,cursorRotation:number, currentTime:number):IGa
 
                                 newWalls.push(newWall);
                                 //food removing is evaluated by other part of game update function
-                                spawnRandomFoods(newWall, 0.002, game.foods);
+                                spawnRandomFoods(newWall, 0.0002, game.foods);
 
                             }else{
-                                //console.log('Not creating a new wall.');
+                                console.log('Not creating a new wall.');
                             }
                         }
-                    }
+                    //}
                 }
 
                 newWalls.push(wall);

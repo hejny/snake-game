@@ -2,7 +2,7 @@ import {ISnake} from '../model/game'
 import {Vector2} from '../classes/vector2'
 
 
-export function renderSnake(ctx:CanvasRenderingContext2D, snake:ISnake, durationGame:number, center:Vector2, gameDuration:number){
+export function renderSnake(ctx:CanvasRenderingContext2D, layer:number, snake:ISnake, durationGame:number, center:Vector2, gameDuration:number){
 
     /*ctx.fillStyle = this.color;
     ctx.lineWidth = this.radius;
@@ -49,19 +49,26 @@ export function renderSnake(ctx:CanvasRenderingContext2D, snake:ISnake, duration
             );*/
             const thisMoveBy = new Vector2(0,0);
 
-            ctx.fillStyle = this.color;
-            ctx.lineWidth = Math.sqrt(snakeFromHead)*1.1;//todo via real length
-            ctx.lineCap="round";
-            ctx.beginPath();
+            if(layer===2) {
+                ctx.strokeStyle = '#000000';
+                ctx.lineWidth = Math.sqrt(snakeFromHead) * 1.1;//todo via real length
+                ctx.lineCap = "round";
+                ctx.beginPath();
+                ctx.moveTo(lastSegment.x - center.x + lastMoveBy.x, lastSegment.y - center.y + lastMoveBy.y);
+                ctx.lineTo(thisSegment.x - center.x + thisMoveBy.x, thisSegment.y - center.y + thisMoveBy.y);
+                ctx.stroke();
+            }else
+            if(layer===1) {
+                ctx.strokeStyle = '#00ffff';
+                ctx.lineWidth = (Math.sin(snakeFromHead/2)+1)/2 * Math.sqrt(snakeFromHead) * 0.6;
+                ctx.lineCap = "round";
+                ctx.beginPath();
+                ctx.moveTo(lastSegment.x - center.x + lastMoveBy.x, lastSegment.y - center.y + lastMoveBy.y);
+                ctx.lineTo(thisSegment.x - center.x + thisMoveBy.x, thisSegment.y - center.y + thisMoveBy.y);
+                ctx.stroke();
+            }
 
 
-
-
-
-
-            ctx.moveTo(lastSegment.x-center.x+lastMoveBy.x,lastSegment.y-center.y+lastMoveBy.y);
-            ctx.lineTo(thisSegment.x-center.x+thisMoveBy.x,thisSegment.y-center.y+thisMoveBy.y);
-            ctx.stroke();
             lastMoveBy = thisMoveBy;
         }
         lastSegment = thisSegment;

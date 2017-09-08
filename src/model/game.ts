@@ -57,7 +57,7 @@ export function spawnRandomFoods(wall:IWall,density:number,foods:IFood[]):void{
 
     //console.log(volumeFoods , volume*density);
 
-    while (volumeFoods < volume*density) {
+    //while (volumeFoods < volume*density) {
 
         const size = Math.random()*10+10;
         const speed = (Math.random()+0.5)*0.1;
@@ -72,7 +72,7 @@ export function spawnRandomFoods(wall:IWall,density:number,foods:IFood[]):void{
             rotationError: (Math.random()-0.5)*Math.PI*2*(3/4)
         });
 
-    }
+    //}
 }
 
 

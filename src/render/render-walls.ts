@@ -9,7 +9,7 @@ export function renderWalls(ctx:CanvasRenderingContext2D, layer:number, walls:IW
 
         if(layer===2) {
 
-            ctx.fillStyle = '#ffffff'//'#cccccc';
+            ctx.fillStyle = '#cccccc'//'#cccccc';
             ctx.beginPath();
             ctx.arc(
                 wall.position.x- center.x,
@@ -21,8 +21,8 @@ export function renderWalls(ctx:CanvasRenderingContext2D, layer:number, walls:IW
             ctx.fill();
 
 
-        }/*else
-        if(layer===1) {
+        }else
+        if(layer===1 && wall.radius-20>0) {
 
 
             ctx.fillStyle = '#ffffff';
@@ -37,6 +37,6 @@ export function renderWalls(ctx:CanvasRenderingContext2D, layer:number, walls:IW
             ctx.fill();
 
 
-        }*/
+        }
     }
 }
