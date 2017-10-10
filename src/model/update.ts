@@ -1,6 +1,6 @@
 import {IGame, wallCollide, IGamePhase, IWall, createFood} from './game'
 import {Vector2} from '../classes/vector2'
-//import {Line2} from "../classes/line2";
+import {Line2} from "../classes/line2";
 import {BOUNDS, WALL_GROWTH_SPEED} from "../config";
 
 
@@ -159,7 +159,7 @@ export function update(game:IGame,cursorRotation:number, currentTime:number):IGa
 
 
         //=============================================Collision on snake
-        /*let lastPoint:Vector2=null;
+        let lastPoint:Vector2=null;
         let firstLine:Line2=null;
         let otherLines:Line2[]=[];
 
@@ -184,7 +184,7 @@ export function update(game:IGame,cursorRotation:number, currentTime:number):IGa
         if(isOnSnake){
             console.log('Collision on snake');
             return null;
-        }*/
+        }/**/
         //=============================================
 
 
@@ -225,10 +225,10 @@ export function update(game:IGame,cursorRotation:number, currentTime:number):IGa
             const nearestSnakePointDistance = Vector2.distance(food.position, nearestSnakePoint);
 
             let newRotation = Math.atan2(food.position.y - nearestSnakePoint.y, food.position.x - nearestSnakePoint.x);
-            newRotation+=Math.PI/2;
+            newRotation+=food.rotationError;//Math.PI/2;
             //newRotation+=Math.PI/2*(1/nearestSnakePointDistance+1);
             //newRotation+=food.rotationError;
-            food.rotation = rotationStep( food.rotation, newRotation , 0.006 * durationTick );
+            food.rotation = rotationStep( food.rotation, newRotation , 0.001 * durationTick );
             const lastFoodPosition = food.position;
 
             food.position = new Vector2(

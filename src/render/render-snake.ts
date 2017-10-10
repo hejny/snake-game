@@ -50,7 +50,7 @@ export function renderSnake(ctx:CanvasRenderingContext2D, layer:number, snake:IS
             const thisMoveBy = new Vector2(0,0);
 
             //if(layer===2) {
-                ctx.strokeStyle = '#000000';
+                ctx.strokeStyle = '#222222';
                 ctx.lineWidth = Math.sqrt(snakeFromHead) * 1.1;//todo via real length
                 ctx.lineCap = "round";
                 ctx.beginPath();
