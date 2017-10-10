@@ -26,7 +26,7 @@ canvas.addEventListener('pointermove',(event)=> {
 
 
 let eatSound = new Howl({
-    src: [`/assets/audio/172033__paulmorek__nom-a-03.wav`]//todo public folder ${process.env.PUBLIC_URL}
+    src: [`${process.env.PUBLIC_URL}/assets/audio/172033__paulmorek__nom-a-03.wav`]
 });
 
 

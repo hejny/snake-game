@@ -2,7 +2,7 @@ import {IFood} from '../model/game'
 import {Vector2} from '../classes/vector2'
 import {ImageCollection} from '../classes/image-collection'
 
-const images = new ImageCollection('/assets/images/objects/mouse/mouse-$.png',100);
+const images = new ImageCollection(`${process.env.PUBLIC_URL}/assets/images/objects/mouse/mouse-$.png`,100);
 
 export function renderFoods(ctx:CanvasRenderingContext2D, foods:IFood[], durationGame:number, center:Vector2){
     for(let food of foods){
