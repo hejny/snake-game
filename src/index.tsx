@@ -16,9 +16,6 @@ const ctx = canvas.getContext("2d");
 
 
 
-let gameData:IGame;
-
-
 let pointerX = 0,pointerY = 0;//todo Vector2
 canvas.addEventListener('pointermove',(event)=> {
     pointerX = canvas.width / 2 - event.clientX;
@@ -27,48 +24,80 @@ canvas.addEventListener('pointermove',(event)=> {
 
 
 
-
+/*
 const saveStateToGamee = _.debounce(function(game:IGame){
     gamee.gameSave(game);//todo why Uncaught data provided to gameSave function must be object
-},1000);
+},1000);*/
 
 
-//=================================================Engine
+//=================================================Game
+class Game{
+
+    private _playing: boolean = false;
+    private _lastTime: number;
+
+    constructor(
+        private _gameData: IGame,
+        private _ctx: CanvasRenderingContext2D,
+        //gamee DI
+
+    ){
+        this.play();
+    }
+
+    private _drawLoop() {
+        console.log(this);
+        if (!this._gameData.gameOver && this._playing) {
+
+            const now = performance.now();
+            const tickDuration = now - this._lastTime;
+            this._lastTime = now;
+
+            //console.log(tickDuration);
+            //const durationGame = game.updated - game.started;
+            //const pointerDistance = Vector2.distance0(new Vector2(pointerX,pointerY));
+            //const px = Math.cos(durationGame/100)*pointerDistance/10;//todo screen
+            //const py = Math.sin(durationGame/100)*pointerDistance/10;
+            const cursorRotation = Math.atan2(pointerY, pointerX) + Math.PI;
+
+
+            this._gameData = update(this._gameData, tickDuration, cursorRotation);//todo gameData should be immutable
+
+
+            if (this._gameData.gameOver) {
+                gamee.gameOver();
+            } else {
+
+                //todo saveStateToGamee(gameData);
+                //todo gamee.updateScore(gameData.score);
+                render(this._ctx, this._gameData);
+
+            }
+
+            window.requestAnimationFrame(() => this._drawLoop);
+
+        }
+    }
+
+    play(){
+        this._lastTime = performance.now();
+        this._playing = true;
+        this._drawLoop();
+    }
+
+    pause(){
+        this._playing = false;
+    }
+}
+
+/*
 //todo engine class
 let lastTime:number;
 let playing = false;
 
 function drawLoop() {
 
-    if(!gameData.gameOver && playing) {
 
-        const now = performance.now();
-        const tickDuration = now - lastTime;
-        lastTime = now;
-
-        //console.log(tickDuration);
-        //const durationGame = game.updated - game.started;
-        //const pointerDistance = Vector2.distance0(new Vector2(pointerX,pointerY));
-        //const px = Math.cos(durationGame/100)*pointerDistance/10;//todo screen
-        //const py = Math.sin(durationGame/100)*pointerDistance/10;
-        const cursorRotation = Math.atan2(pointerY, pointerX) + Math.PI;
-
-
-        gameData = update(gameData,tickDuration,cursorRotation);
-
-        if(gameData.gameOver){
-            gamee.gameOver();
-        }else {
-
-            saveStateToGamee(gameData);
-            gamee.updateScore(gameData.score);
-            render(ctx, gameData);
-
-        }
-
-        window.requestAnimationFrame(drawLoop);
-
-    }
 }
 
 
@@ -79,14 +108,14 @@ function play(){
 }
 function pause(){
     playing = false;
-}
+}*/
 //=================================================
 
 
 
 
 
-
+let game:Game;
 let savedStateFromGamee: IGame = null;
 gamee.gameInit("FullScreen", {}, ["saveState"], function(/*error,*/ data) {
 
@@ -114,6 +143,7 @@ gamee.gameInit("FullScreen", {}, ["saveState"], function(/*error,*/ data) {
 gamee.emitter.addEventListener("start", function(event) {
     console.log('Gamee emits start.');
 
+    let gameData:IGame;
     if(savedStateFromGamee){
         console.log('Creating game data from Gamee storage.');
         gameData = savedStateFromGamee;
@@ -122,7 +152,7 @@ gamee.emitter.addEventListener("start", function(event) {
         gameData = createGame();
     }
 
-    play();
+    game = new Game(gameData,ctx);
     event.detail.callback();
 });
 
@@ -130,7 +160,7 @@ gamee.emitter.addEventListener("start", function(event) {
 gamee.emitter.addEventListener("pause", function(event) {
     console.log('Gamee emits pause.');
 
-    pause();
+    game.pause();
     event.detail.callback();
 });
 
@@ -139,11 +169,11 @@ gamee.emitter.addEventListener("pause", function(event) {
 gamee.emitter.addEventListener("resume", function(event) {
     console.log('Gamee emits resume.');
 
-    play();
-    //game.updated = (new Date()).getTime();
+    game.play();
     event.detail.callback();
 });
 
+/*todo
 // Will be emitted when user clicks the mute button
 // and the game must mute all game sounds.
 gamee.emitter.addEventListener("mute", function(event) {
@@ -158,4 +188,4 @@ gamee.emitter.addEventListener("unmute", function(event) {
     console.log('Gamee emits unmute.');
 
     event.detail.callback();
-});
+});*/

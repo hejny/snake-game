@@ -6,6 +6,7 @@ import {renderWalls} from './render-walls'
 
 export function render(ctx:CanvasRenderingContext2D, game:IGame){
 
+    console.log('render');
 
     const durationGame = game.duration;
 
@@ -20,12 +21,9 @@ export function render(ctx:CanvasRenderingContext2D, game:IGame){
         snakeHead.y - ctx.canvas.height/2
     );
 
-
-    //renderWalls(ctx,2,game.walls,durationGame,center);
-    renderWalls(ctx,1,game.walls,durationGame,center);
+    renderWalls(ctx,game.walls,center);
     renderFoods(ctx,game.foods,durationGame,center);
-    //renderSnake(ctx,2,game.snake,durationGame,center);
-    renderSnake(ctx,1,game.snake,durationGame,center);
+    renderSnake(ctx,game.snake,center);
 
 
 
