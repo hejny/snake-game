@@ -38,57 +38,49 @@ export class Line2 {
 
     }
 
+    //todo edges param is unused and deprecated
+    collideLine(line2: Line2,edges:boolean): boolean {
 
-    collideLine(line: Line2,edges:boolean): boolean {
+        const line1 = this;
 
-        let
-            a1x = this.point1.x,
-            a1y = this.point1.y,
-            a2x = this.point2.x,
-            a2y = this.point2.y,
-            b1x = line.point1.x,
-            b1y = line.point1.y,
-            b2x = line.point2.x,
-            b2y = line.point2.y;
+        const
+            x1 = line1.point1.x,
+            x2 = line1.point2.x,
+            x3 = line2.point1.x,
+            x4 = line2.point2.x,
+            y1 = line1.point1.y,
+            y2 = line1.point2.y,
+            y3 = line2.point1.y,
+            y4 = line2.point2.y;
 
-        var denominator = ((a2x - a1x) * (b2y - b1y)) - ((a2y - a1y) * (b2x - b1x));
-        var numerator1 = ((a1y - b1y) * (b2x - b1x)) - ((a1x - b1x) * (b2y - b1y));
-        var numerator2 = ((a1y - b1y) * (a2x - a1x)) - ((a1x - b1x) * (a2y - a1y));
-        var collision;
-
-        //console.log(denominator,numerator1,numerator2);
-
-        //todo is it correct
-        if(!edges && !numerator1)return false;
-
-        // Detect coincident lines (has a problem, read below)
-        if (denominator === 0) {
-
-
-            //var collision= (numerator1 == 0 && numerator2 == 0);
-            //collision=false;
-
-
-            var bOnA = this.collidePoint(line.point1);
-            var aOnB = line.collidePoint(this.point1);
-            //var bOnA = TOWNS.TMath.isOnLine(a1x, a1y, a2x, a2y, b1x, b1y);
-            //var aOnB = TOWNS.TMath.isOnLine(b1x, b1y, b2x, b2y, a1x, a1y);
-
-            return (bOnA || aOnB);
-
-
+        //https://en.wikipedia.org/wiki/Line%E2%80%93line_intersection#Mathematics
+        var x=((x1*y2-y1*x2)*(x3-x4)-(x1-x2)*(x3*y4-y3*x4))/((x1-x2)*(y3-y4)-(y1-y2)*(x3-x4));
+        var y=((x1*y2-y1*x2)*(y3-y4)-(y1-y2)*(x3*y4-y3*x4))/((x1-x2)*(y3-y4)-(y1-y2)*(x3-x4));
+        if (isNaN(x)||isNaN(y)) {
+            return false;
         } else {
-
-            //
-
-            var r = numerator1 / denominator;
-            var s = numerator2 / denominator;
-
-            collision = ((r >= 0 && r <= 1) && (s >= 0 && s <= 1));
-
+            if (x1>=x2) {
+                if (!(x2<=x&&x<=x1)) {return false;}
+            } else {
+                if (!(x1<=x&&x<=x2)) {return false;}
+            }
+            if (y1>=y2) {
+                if (!(y2<=y&&y<=y1)) {return false;}
+            } else {
+                if (!(y1<=y&&y<=y2)) {return false;}
+            }
+            if (x3>=x4) {
+                if (!(x4<=x&&x<=x3)) {return false;}
+            } else {
+                if (!(x3<=x&&x<=x4)) {return false;}
+            }
+            if (y3>=y4) {
+                if (!(y4<=y&&y<=y3)) {return false;}
+            } else {
+                if (!(y3<=y&&y<=y4)) {return false;}
+            }
         }
-
-        return collision;
+        return true;
 
     }
 

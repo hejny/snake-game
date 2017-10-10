@@ -1,6 +1,7 @@
 import {Vector2} from '../classes/vector2'
 import {BOUNDS} from "../config";
 
+//todo interfaces to separate dir
 export interface ISnake{
     length: number,
     headRotation: number;
@@ -30,7 +31,7 @@ export enum IGamePhase {
     PAUSE,
     //AFTER
 }
-export interface IGame{
+export interface IGame{//todo refactor to IGameData
     started: number;
     updated: number;
     phase: IGamePhase;

@@ -1,5 +1,6 @@
-import {ISnake} from '../model/game'
-import {Vector2} from '../classes/vector2'
+import {ISnake} from '../model/game';
+import {Vector2} from '../classes/vector2';
+import {Line2} from "../classes/line2";
 
 
 export function renderSnake(ctx:CanvasRenderingContext2D, layer:number, snake:ISnake, durationGame:number, center:Vector2, gameDuration:number){
@@ -50,6 +51,15 @@ export function renderSnake(ctx:CanvasRenderingContext2D, layer:number, snake:IS
             const thisMoveBy = new Vector2(0,0);
 
             //if(layer===2) {
+
+
+                /*const firstLine = new Line2(snake.segments[0],snake.segments[1]);
+                if(new Line2(lastSegment,thisSegment).collideLine(firstLine,false)){
+                    ctx.strokeStyle = '#ff0000';
+                }else{
+                    ctx.strokeStyle = '#222222';
+                }*/
+
                 ctx.strokeStyle = '#222222';
                 ctx.lineWidth = Math.sqrt(snakeFromHead) * 1.1;//todo via real length
                 ctx.lineCap = "round";
@@ -57,6 +67,11 @@ export function renderSnake(ctx:CanvasRenderingContext2D, layer:number, snake:IS
                 ctx.moveTo(lastSegment.x - center.x + lastMoveBy.x, lastSegment.y - center.y + lastMoveBy.y);
                 ctx.lineTo(thisSegment.x - center.x + thisMoveBy.x, thisSegment.y - center.y + thisMoveBy.y);
                 ctx.stroke();
+
+
+
+
+
             /*}else
             if(layer===1) {
                 ctx.strokeStyle = '#00ffff';

@@ -159,6 +159,7 @@ export function update(game:IGame,cursorRotation:number, currentTime:number):IGa
 
 
         //=============================================Collision on snake
+        /**/
         let lastPoint:Vector2=null;
         let firstLine:Line2=null;
         let otherLines:Line2[]=[];
@@ -183,7 +184,12 @@ export function update(game:IGame,cursorRotation:number, currentTime:number):IGa
 
         if(isOnSnake){
             console.log('Collision on snake');
-            return null;
+
+            //otherLines.forEach((line)=>{
+            //    console.log(line,firstLine,line.collideLine(firstLine,false));
+            //});
+            return null;//todo return finished IGame not null
+
         }/**/
         //=============================================
 
