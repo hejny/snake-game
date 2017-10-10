@@ -1,4 +1,4 @@
-import {IGame, wallCollide, IGamePhase, IWall, spawnRandomFoods} from './game'
+import {IGame, wallCollide, IGamePhase, IWall, createFood} from './game'
 import {Vector2} from '../classes/vector2'
 //import {Line2} from "../classes/line2";
 import {BOUNDS, WALL_GROWTH_SPEED} from "../config";
@@ -35,8 +35,7 @@ export function update(game:IGame,cursorRotation:number, currentTime:number):IGa
     game.updated = currentTime;
 
     const durationGame = game.updated - game.started;
-    const durationTick = Math.min(game.updated - lastUpdated,100);
-
+    const durationTick = Math.min(game.updated - lastUpdated,100) * Math.sqrt(10+game.score)/3;
 
     //console.log(durationTick);
 
@@ -59,7 +58,7 @@ export function update(game:IGame,cursorRotation:number, currentTime:number):IGa
 
 
         //=============================================Snake movement
-        const speed = game.score+100;
+        const speed = 100;//game.score+100;
         //const speed = Math.sqrt(10000*Math.pow(2,game.score/10));
         const oldHead = game.snake.segments[0];
 
@@ -108,7 +107,7 @@ export function update(game:IGame,cursorRotation:number, currentTime:number):IGa
         const FOODS_LIMIT = 5;
 
 
-        //=============================================Collision on food
+        //=============================================Eating = Collision on food
         let newFoods = [];
         for (let food of game.foods) {
             if (Vector2.distance(newHead, food.position) < food.size) {
@@ -126,6 +125,8 @@ export function update(game:IGame,cursorRotation:number, currentTime:number):IGa
                 newWalls.push(newWall);
                 spawnRandomFoods(newWall, 0.0002, game.foods);*/
 
+
+                newFoods.push(createFood(game.walls[0]));
 
 
             } else {
@@ -257,6 +258,8 @@ export function update(game:IGame,cursorRotation:number, currentTime:number):IGa
                 //food.position = wallSnap(lastWall,food.position,BOUNDS);
                 //const targetRotation = Math.atan2(food.position.y-lastFoodPosition.y,food.position.x-lastFoodPosition.x);
                 //food.rotation = rotationStep(food.rotation,targetRotation,0.006 * durationTick);
+                newFoods.push(createFood(game.walls[0]));
+
             }else{
                 newFoods.push(food);
             }
@@ -272,7 +275,7 @@ export function update(game:IGame,cursorRotation:number, currentTime:number):IGa
 
 
 
-
+        /*
         //=============================================Growth/Remove/spawn walls
         const WALLS_LIMIT = 15;
 
@@ -362,7 +365,7 @@ export function update(game:IGame,cursorRotation:number, currentTime:number):IGa
         //-------------------------
 
 
-        game.walls = newWalls;
+        game.walls = newWalls;*/
         //=============================================
 
 

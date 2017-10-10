@@ -42,38 +42,40 @@ export interface IGame{
 
 //todo separate files for snake, food, wall
 export function wallCollide(wall:IWall,point:Vector2,bounds:number=0):boolean{
-    return Vector2.distance(wall.position,point)<=wall.radiusDest-bounds;
+    return Vector2.distance(wall.position,point)<=wall.radius-bounds;//todo should it be here radius or radiusDest?
 }
 
 //todo ?should it be pure function???
-export function spawnRandomFoods(wall:IWall,density:number,foods:IFood[]):void{
+export function spawnRandomFoods(wall:IWall,count:number,foods:IFood[]):void{
 
-    if(density>1 || density<0){
-        throw new Error('Density should be between 0 and 1.');
+    if(count<0){
+        throw new Error('Count should be more than 0.');
     }
 
-    const volume = Math.pow(wall.radiusDest,2)*Math.PI*2;
-    let volumeFoods = 0;
+    for (let i=0;i<count;i++) {
 
-    //console.log(volumeFoods , volume*density);
+        foods.push(createFood(wall));
 
-    //while (volumeFoods < volume*density) {
-
-        const size = Math.random()*10+10;
-        const speed = (Math.random()+0.5)*0.1;
-
-        volumeFoods += Math.PI*size*size/4;
-
-        //console.log('Spawning food.');
-        foods.push({
-            position:Vector2.randomCircle(wall.position,wall.radiusDest),
-            rotation:0,
-            size,speed,
-            rotationError: (Math.random()-0.5)*Math.PI*2*(3/4)
-        });
-
-    //}
+    }
 }
+
+
+
+
+export function createFood(wall:IWall):IFood{
+
+    const size = Math.random()*10+10;
+    const speed = (Math.random()+0.5)*0.1;
+
+    return {
+        position:Vector2.randomCircle(wall.position,wall.radiusDest),
+        rotation:0,
+        size,speed,
+        rotationError: (Math.random()-0.5)*Math.PI*2*(3/4)
+    };
+}
+
+
 
 
 /*
@@ -133,20 +135,20 @@ export function createGame():IGame{
 
     walls.push({
         position: new Vector2(0,0),
-        radius: 250,
-        radiusDest: 250,
+        radius: 333,
+        radiusDest: 333,
     });
 
-    walls.push({
+    /*walls.push({
         position: new Vector2(100,300),
         radius: 100,
         radiusDest: 150
-    });
+    });*/
 
 
     let foods=[];
     for(let wall of walls){
-        spawnRandomFoods(wall,0.002,foods);//todo food density as const in config
+        spawnRandomFoods(wall,3,foods);//todo food count as const in config
     }
 
 

@@ -49,7 +49,7 @@ export function renderSnake(ctx:CanvasRenderingContext2D, layer:number, snake:IS
             );*/
             const thisMoveBy = new Vector2(0,0);
 
-            if(layer===2) {
+            //if(layer===2) {
                 ctx.strokeStyle = '#000000';
                 ctx.lineWidth = Math.sqrt(snakeFromHead) * 1.1;//todo via real length
                 ctx.lineCap = "round";
@@ -57,7 +57,7 @@ export function renderSnake(ctx:CanvasRenderingContext2D, layer:number, snake:IS
                 ctx.moveTo(lastSegment.x - center.x + lastMoveBy.x, lastSegment.y - center.y + lastMoveBy.y);
                 ctx.lineTo(thisSegment.x - center.x + thisMoveBy.x, thisSegment.y - center.y + thisMoveBy.y);
                 ctx.stroke();
-            }else
+            /*}else
             if(layer===1) {
                 ctx.strokeStyle = '#00ffff';
                 ctx.lineWidth = (Math.sin(snakeFromHead/2)+1)/2 * Math.sqrt(snakeFromHead) * 0.6;
@@ -66,7 +66,7 @@ export function renderSnake(ctx:CanvasRenderingContext2D, layer:number, snake:IS
                 ctx.moveTo(lastSegment.x - center.x + lastMoveBy.x, lastSegment.y - center.y + lastMoveBy.y);
                 ctx.lineTo(thisSegment.x - center.x + thisMoveBy.x, thisSegment.y - center.y + thisMoveBy.y);
                 ctx.stroke();
-            }
+            }*/
 
 
             lastMoveBy = thisMoveBy;
