@@ -18,10 +18,21 @@ const ctx = canvas.getContext("2d");
 
 
 let pointerX = 0,pointerY = 0;//todo Vector2
-canvas.addEventListener('pointermove',(event)=> {
+function pointEventListener(event){
+    event.preventDefault();
+    event.stopPropagation();
     pointerX = canvas.width / 2 - event.clientX;
     pointerY = canvas.height / 2 - event.clientY;
-});
+}
+canvas.addEventListener('pointerdown',pointEventListener);
+canvas.addEventListener('pointerup',pointEventListener);
+canvas.addEventListener('pointermove',pointEventListener);
+
+
+canvas.addEventListener('touchstart', (event)=>event.preventDefault());
+canvas.addEventListener('touchmove', (event)=>event.preventDefault());
+canvas.addEventListener('touchend', (event)=>event.preventDefault());
+
 
 
 
