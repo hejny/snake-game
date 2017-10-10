@@ -7,7 +7,7 @@ import {renderWalls} from './render-walls'
 export function render(ctx:CanvasRenderingContext2D, game:IGame){
 
 
-    const durationGame = game.updated - game.started;
+    const durationGame = game.duration;
 
 
     ctx.fillStyle = '#222222';
@@ -21,11 +21,11 @@ export function render(ctx:CanvasRenderingContext2D, game:IGame){
     );
 
 
-    renderWalls(ctx,2,game.walls,durationGame,center);
+    //renderWalls(ctx,2,game.walls,durationGame,center);
     renderWalls(ctx,1,game.walls,durationGame,center);
     renderFoods(ctx,game.foods,durationGame,center);
-    renderSnake(ctx,2,game.snake,durationGame,center,(new Date()).getTime()-game.started);
-    renderSnake(ctx,1,game.snake,durationGame,center,(new Date()).getTime()-game.started);
+    //renderSnake(ctx,2,game.snake,durationGame,center);
+    renderSnake(ctx,1,game.snake,durationGame,center);
 
 
 

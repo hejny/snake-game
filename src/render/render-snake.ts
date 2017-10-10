@@ -3,7 +3,7 @@ import {Vector2} from '../classes/vector2';
 import {Line2} from "../classes/line2";
 
 
-export function renderSnake(ctx:CanvasRenderingContext2D, layer:number, snake:ISnake, durationGame:number, center:Vector2, gameDuration:number){
+export function renderSnake(ctx:CanvasRenderingContext2D, layer:number, snake:ISnake, durationGame:number, center:Vector2){
 
     /*ctx.fillStyle = this.color;
     ctx.lineWidth = this.radius;

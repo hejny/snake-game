@@ -25,16 +25,18 @@ export interface IWall{
     radiusDest: number
 }
 
+/*
 export enum IGamePhase {
     //BEFORE,
     PLAY,
     PAUSE,
     //AFTER
-}
+}*/
+
+
 export interface IGame{//todo refactor to IGameData
-    started: number;
-    updated: number;
-    phase: IGamePhase;
+    duration: number;
+    gameOver: boolean;
     score: number;
     snake: ISnake;
     foods: IFood[];
@@ -156,11 +158,9 @@ export function createGame():IGame{
 
     return {
 
-        started: (new Date()).getTime(),
-        updated: null,
+        duration: 0,
+        gameOver: false,
 
-
-        phase: IGamePhase.PLAY,
         score: 0,
 
 

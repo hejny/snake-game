@@ -1,6 +1,6 @@
 import './style/index.css';
 import * as _ from "lodash";
-import {createGame,IGame,IGamePhase} from './model/game';
+import {createGame,IGame} from './model/game';
 import {update} from './model/update';
 import {render} from './render/render';
 import {Vector2} from "./classes/vector2";
@@ -16,7 +16,7 @@ const ctx = canvas.getContext("2d");
 
 
 
-let game:IGame=null;// = createGame();
+let gameData:IGame;
 
 
 let pointerX = 0,pointerY = 0;//todo Vector2
@@ -28,15 +28,25 @@ canvas.addEventListener('pointermove',(event)=> {
 
 
 
-const updateState = _.debounce(function(game:IGame){
+const saveStateToGamee = _.debounce(function(game:IGame){
     gamee.gameSave(game);//todo why Uncaught data provided to gameSave function must be object
 },1000);
 
 
+//=================================================Engine
+//todo engine class
+let lastTime:number;
+let playing = false;
 
 function drawLoop() {
-    if(game) {
 
+    if(!gameData.gameOver && playing) {
+
+        const now = performance.now();
+        const tickDuration = now - lastTime;
+        lastTime = now;
+
+        //console.log(tickDuration);
         //const durationGame = game.updated - game.started;
         //const pointerDistance = Vector2.distance0(new Vector2(pointerX,pointerY));
         //const px = Math.cos(durationGame/100)*pointerDistance/10;//todo screen
@@ -44,31 +54,45 @@ function drawLoop() {
         const cursorRotation = Math.atan2(pointerY, pointerX) + Math.PI;
 
 
-        game = update(game,cursorRotation,(new Date()).getTime());
+        gameData = update(gameData,tickDuration,cursorRotation);
 
-        if(!game){
+        if(gameData.gameOver){
             gamee.gameOver();
         }else {
 
-            updateState(game);
-            gamee.updateScore(game.score);
-            render(ctx, game);
+            saveStateToGamee(gameData);
+            gamee.updateScore(gameData.score);
+            render(ctx, gameData);
 
         }
 
-    }
+        window.requestAnimationFrame(drawLoop);
 
-    window.requestAnimationFrame(drawLoop);
+    }
 }
 
 
+function play(){
+    lastTime = performance.now();
+    playing = true;
+    drawLoop();
+}
+function pause(){
+    playing = false;
+}
+//=================================================
 
-let saveState: IGame = null;
+
+
+
+
+
+let savedStateFromGamee: IGame = null;
 gamee.gameInit("FullScreen", {}, ["saveState"], function(/*error,*/ data) {
 
 
     try{
-        saveState = JSON.parse(data.saveState);
+        savedStateFromGamee = JSON.parse(data.saveState);
     }catch(error){
         console.warn(error);
     }
@@ -78,8 +102,6 @@ gamee.gameInit("FullScreen", {}, ["saveState"], function(/*error,*/ data) {
         if(error !== null){
             console.warn(error)
         }
-
-        window.requestAnimationFrame(drawLoop);
 
 
     });
@@ -92,14 +114,15 @@ gamee.gameInit("FullScreen", {}, ["saveState"], function(/*error,*/ data) {
 gamee.emitter.addEventListener("start", function(event) {
     console.log('Gamee emits start.');
 
-    if(saveState){
-        game = saveState;
-        game.updated = (new Date()).getTime();
+    if(savedStateFromGamee){
+        console.log('Creating game data from Gamee storage.');
+        gameData = savedStateFromGamee;
     }else{
-        game = createGame();
+        console.log('Creating new game data.');
+        gameData = createGame();
     }
 
-    //game.phase = IGamePhase.PLAY;//todo send action
+    play();
     event.detail.callback();
 });
 
@@ -107,7 +130,7 @@ gamee.emitter.addEventListener("start", function(event) {
 gamee.emitter.addEventListener("pause", function(event) {
     console.log('Gamee emits pause.');
 
-    game.phase = IGamePhase.PAUSE;//todo send action
+    pause();
     event.detail.callback();
 });
 
@@ -116,8 +139,8 @@ gamee.emitter.addEventListener("pause", function(event) {
 gamee.emitter.addEventListener("resume", function(event) {
     console.log('Gamee emits resume.');
 
-    game.phase = IGamePhase.PLAY;//todo send action
-    game.updated = (new Date()).getTime();
+    play();
+    //game.updated = (new Date()).getTime();
     event.detail.callback();
 });
 
