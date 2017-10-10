@@ -1,5 +1,6 @@
 import './style/index.css';
 import * as _ from "lodash";
+import {Howl} from "howler";
 import {createGame,IGame} from './model/game';
 import Game from './classes/Game';
 import {Vector2} from "./classes/vector2";
@@ -24,6 +25,12 @@ canvas.addEventListener('pointermove',(event)=> {
 
 
 
+let eatSound = new Howl({
+    src: [`/assets/audio/172033__paulmorek__nom-a-03.wav`]//todo public folder ${process.env.PUBLIC_URL}
+});
+
+
+
 /*
 const saveStateToGamee = _.debounce(function(game:IGame){
     gamee.gameSave(game);//todo why Uncaught data provided to gameSave function must be object
@@ -31,10 +38,11 @@ const saveStateToGamee = _.debounce(function(game:IGame){
 
 
 let savedStateFromGamee: IGame = null;
-gamee.gameInit("FullScreen", {}, ["saveState"], function(/*error,*/ data) {
+gamee.gameInit("FullScreen", {}, ["saveState"], function(error, data) {
 
 
     try{
+        //console.log(data.saveState);
         savedStateFromGamee = JSON.parse(data.saveState);
     }catch(error){
         console.warn(error);
@@ -77,7 +85,8 @@ gamee.emitter.addEventListener("start", _.debounce((event)=>{
         ctx,
         ()=>new Vector2(pointerX,pointerY),
         ()=>{console.log('GameOver!');gamee.gameOver()},
-        (score)=>gamee.updateScore(score)
+        (score)=>{eatSound.play();gamee.updateScore(score)},
+        _.throttle((gameData:IGame)=>{ gamee.gameSave(JSON.stringify(gameData));},1000)
     );
     game.play();
     event.detail.callback();
@@ -100,12 +109,12 @@ gamee.emitter.addEventListener("resume", (event)=>{
     event.detail.callback();
 });
 
-/*todo
+
 // Will be emitted when user clicks the mute button
 // and the game must mute all game sounds.
 gamee.emitter.addEventListener("mute", function(event) {
     console.log('Gamee emits mute.');
-
+    eatSound.mute(true);
     event.detail.callback();
 });
 
@@ -113,6 +122,6 @@ gamee.emitter.addEventListener("mute", function(event) {
 // and the game should unmute all game sounds.
 gamee.emitter.addEventListener("unmute", function(event) {
     console.log('Gamee emits unmute.');
-
+    eatSound.mute(false);
     event.detail.callback();
-});*/
+});

@@ -8,6 +8,7 @@ export default class Game{
     private _playing: boolean = false;
     private _lastTime: number;
     private _disposed: boolean;
+    private _lastScore: number;
 
     constructor(
         private _gameData: IGame,
@@ -15,6 +16,7 @@ export default class Game{
         private _getPointerPositionCallback: ()=>Vector2,
         private _gameOverCallback: ()=>void,
         private _updateScoreCallback: (score:number)=>void,
+        private _saveStateCallback: (state:IGame)=>void,
 
     ){
         render(this._ctx, this._gameData);
@@ -45,15 +47,17 @@ export default class Game{
 
 
             if (this._gameData.gameOver) {
-                
+
                 this._gameOverCallback();
                 this.dispose();
 
             } else {
 
-                //todo saveStateToGamee(gameData);
-                //todo gamee.updateScore(gameData.score);
-                this._updateScoreCallback(this._gameData.score);
+                this._saveStateCallback(this._gameData);
+                if(this._lastScore!==this._gameData.score){
+                    this._updateScoreCallback(this._gameData.score);
+                    this._lastScore=this._gameData.score;
+                }
                 render(this._ctx, this._gameData);
 
             }

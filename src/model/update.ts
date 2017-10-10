@@ -31,16 +31,16 @@ export function update(game:IGame,tickDuration:number,cursorRotation:number):IGa
 
 
     tickDuration *= Math.sqrt(10 + game.score) / 3;
+    let gameOver = false;
+    let newScore = game.score;
 
-    //todo create new IGame object
-    game.duration += tickDuration;
 
-
-    const newWalls = [];
+    let newSnakeLength = game.snake.length;
+    const newWalls = game.walls.concat();
 
 
     //=============================================Snake rotation
-    game.snake.headRotation = rotationStep(game.snake.headRotation, cursorRotation, 0.006 * tickDuration);
+    const newSnakeHeadRotation = rotationStep(game.snake.headRotation, cursorRotation, 0.006 * tickDuration);
     //=============================================
 
 
@@ -51,13 +51,13 @@ export function update(game:IGame,tickDuration:number,cursorRotation:number):IGa
 
 
     const newHead = new Vector2(
-        oldHead.x + Math.cos(game.snake.headRotation) * speed * tickDuration / 1000,
-        oldHead.y + Math.sin(game.snake.headRotation) * speed * tickDuration / 1000
+        oldHead.x + Math.cos(newSnakeHeadRotation) * speed * tickDuration / 1000,
+        oldHead.y + Math.sin(newSnakeHeadRotation) * speed * tickDuration / 1000
     );
 
 
-    let newSegments = [];
-    newSegments.push(newHead);
+    let newSnakeSegments = [];
+    newSnakeSegments.push(newHead);
 
 
     let lastSegment = newHead;
@@ -71,7 +71,7 @@ export function update(game:IGame,tickDuration:number,cursorRotation:number):IGa
         accumulatedLength += Vector2.distance(lastSegment, currentSegment);
         lastSegment = currentSegment;
 
-        newSegments.push(currentSegment);
+        newSnakeSegments.push(currentSegment);
 
         i++;
 
@@ -82,9 +82,6 @@ export function update(game:IGame,tickDuration:number,cursorRotation:number):IGa
         newSegments.push(game.snake.segments[i]);
     }*/
 
-
-    //todo pure
-    game.snake.segments = newSegments;
     //=============================================
 
 
@@ -92,12 +89,12 @@ export function update(game:IGame,tickDuration:number,cursorRotation:number):IGa
 
 
     //=============================================Eating = Collision on food
-    let newFoods = [];
+    const newFoods = [];
     for (let food of game.foods) {
-        if (Vector2.distance(newHead, food.position) < food.size) {
+        if (Vector2.distance(newHead, food.position) < /*food.size*/20) {
 
-            game.score++;//todo pure
-            game.snake.length += 10;//todo pure
+            newScore++;
+            newSnakeLength += 10;
 
 
             /*const newWall = {
@@ -116,10 +113,6 @@ export function update(game:IGame,tickDuration:number,cursorRotation:number):IGa
             newFoods.push(food);
         }
     }
-
-
-    //todo pure
-    game.foods = newFoods;
     //=============================================
 
 
@@ -133,8 +126,7 @@ export function update(game:IGame,tickDuration:number,cursorRotation:number):IGa
     }
     if (!isOnWall) {
         console.log('Collision on walls');
-        game.gameOver = true;//todo create new object
-        return game;
+        gameOver = true;
     }
     //=============================================
 
@@ -166,13 +158,7 @@ export function update(game:IGame,tickDuration:number,cursorRotation:number):IGa
 
         if (isOnSnake) {
             console.log('Collision on snake');
-
-            //otherLines.forEach((line)=>{
-            //    console.log(line,firstLine,line.collideLine(firstLine,false));
-            //});
-            game.gameOver = true;//todo create new object
-            return game;
-
+            gameOver = true;
         }
     }
     /**/
@@ -181,9 +167,9 @@ export function update(game:IGame,tickDuration:number,cursorRotation:number):IGa
 
     //=============================================Movement of foods
     //const snakeHead = game.snake.segments[0];
-    newFoods = [];
+    const newFoods2 = [];//todo better
 
-    for (let food of game.foods) {
+    for (let food of newFoods) {
 
 
         //-----------------nearest snake point
@@ -248,16 +234,14 @@ export function update(game:IGame,tickDuration:number,cursorRotation:number):IGa
             //food.position = wallSnap(lastWall,food.position,BOUNDS);
             //const targetRotation = Math.atan2(food.position.y-lastFoodPosition.y,food.position.x-lastFoodPosition.x);
             //food.rotation = rotationStep(food.rotation,targetRotation,0.006 * tickDuration);
-            newFoods.push(createFood(game.walls[0]));
+            newFoods2.push(createFood(game.walls[0]));
 
         } else {
-            newFoods.push(food);
+            newFoods2.push(food);
         }
 
 
     }
-
-    game.foods = newFoods;//todo when spawning walls newFoods are mutating!
     //=============================================
 
 
@@ -355,7 +339,18 @@ export function update(game:IGame,tickDuration:number,cursorRotation:number):IGa
     //=============================================
 
 
-    return game;//todo create new object
+    return {
+        duration: game.duration + tickDuration,
+        gameOver,
+        score: newScore,
+        snake: {
+            length: newSnakeLength,
+            headRotation: newSnakeHeadRotation,
+            segments: newSnakeSegments
+        },
+        foods: newFoods2,
+        walls: newWalls
+    };
 
 
 }

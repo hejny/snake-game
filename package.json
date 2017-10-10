@@ -3,9 +3,11 @@
   "version": "0.1.0",
   "private": false,
   "dependencies": {
+    "@types/howler": "^2.0.3",
     "@types/lodash": "^4.14.71",
-    "lodash": "^4.17.4",
     "gamee": "^2.0.0",
+    "howler": "^2.0.5",
+    "lodash": "^4.17.4",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
     "redux": "^3.7.2"
