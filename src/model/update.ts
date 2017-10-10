@@ -141,37 +141,39 @@ export function update(game:IGame,tickDuration:number,cursorRotation:number):IGa
 
     //=============================================Collision on snake
     /**/
-    let lastPoint: Vector2 = null;
-    let firstLine: Line2 = null;
-    let otherLines: Line2[] = [];
+    if(game.duration>2000) {
+        let lastPoint: Vector2 = null;
+        let firstLine: Line2 = null;
+        let otherLines: Line2[] = [];
 
 
-    for (let currentPoint of game.snake.segments) {
-        if (lastPoint) {
-            if (!firstLine) {
-                firstLine = new Line2(lastPoint, currentPoint);
-            } else {
-                otherLines.push(new Line2(lastPoint, currentPoint));
+        for (let currentPoint of game.snake.segments) {
+            if (lastPoint) {
+                if (!firstLine) {
+                    firstLine = new Line2(lastPoint, currentPoint);
+                } else {
+                    otherLines.push(new Line2(lastPoint, currentPoint));
+                }
             }
+            lastPoint = currentPoint;
         }
-        lastPoint = currentPoint;
-    }
 
-    const isOnSnake = otherLines.some((line) => {
-        //console.log(line,firstLine,line.collideLine(firstLine));
-        return line.collideLine(firstLine, false);
-    });
+        const isOnSnake = otherLines.some((line) => {
+            //console.log(line,firstLine,line.collideLine(firstLine));
+            return line.collideLine(firstLine, false);
+        });
 
 
-    if (isOnSnake) {
-        console.log('Collision on snake');
+        if (isOnSnake) {
+            console.log('Collision on snake');
 
-        //otherLines.forEach((line)=>{
-        //    console.log(line,firstLine,line.collideLine(firstLine,false));
-        //});
-        game.gameOver = true;//todo create new object
-        return game;
+            //otherLines.forEach((line)=>{
+            //    console.log(line,firstLine,line.collideLine(firstLine,false));
+            //});
+            game.gameOver = true;//todo create new object
+            return game;
 
+        }
     }
     /**/
     //=============================================

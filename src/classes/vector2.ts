@@ -1,10 +1,4 @@
 export class Vector2 {
-    constructor(public x:number, public y:number) {
-    }
-
-    static distance0(vector:Vector2){
-        return(Math.sqrt(Math.pow(vector.x,2)+Math.pow(vector.y,2)));
-    }
 
     static distance(vectorA:Vector2,vectorB:Vector2){
         return(Math.sqrt(Math.pow(vectorA.x-vectorB.x,2)+Math.pow(vectorA.y-vectorB.y,2)))
@@ -41,6 +35,17 @@ export class Vector2 {
             center.x + Math.cos(rotation)*radius,
             center.y + Math.sin(rotation)*radius
         ))
+    }
+
+    constructor(public x:number, public y:number) {
+    }
+
+    get distance0(){
+        return(Math.sqrt(Math.pow(this.x,2)+Math.pow(this.y,2)));
+    }
+
+    get rotation0(){
+        return(Math.atan2(this.y,this.x));
     }
 
 

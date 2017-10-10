@@ -155,28 +155,27 @@ export function createGame():IGame{
     }
 
 
+    const segments:Vector2[] = [];
+    for(let i=0;i<50;i++){
+        segments.push(new Vector2(
+            Math.sin(i*10/180*Math.PI*2)*i,
+            Math.cos(i*10/180*Math.PI)*i
+        ));
+    }
+
+
 
     return {
-
         duration: 0,
         gameOver: false,
-
         score: 0,
-
-
         snake: {
-
             length: 300,
             headRotation: 0,
-            segments:[
-                {x: 0, y: 0}
-            ]
-
-
+            segments
         },
         foods,
         walls
-
     };
 
 

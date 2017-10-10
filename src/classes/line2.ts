@@ -29,8 +29,8 @@ export class Line2 {
 
         if (aSlope != bSlope)return false;
 
-        var aDist = Vector2.distance0(this.point2);
-        var bDist = Vector2.distance0(point);
+        var aDist = this.point2.distance0;
+        var bDist = point.distance0;
         //var aDist = TOWNS.TMath.xy2dist(a2y, a2x);
         //var bDist = TOWNS.TMath.xy2dist(b1y, b1x);
 

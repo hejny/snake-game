@@ -1,7 +1,6 @@
 ##TODO list
 
 ###Bugs
-- snake self collision
 - starting tiny tail
 
 ###Game
